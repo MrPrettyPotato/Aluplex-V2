@@ -1,0 +1,4 @@
+ERROR NUMMERS
+---------------
+Hier worden alle nummers van errors weergegeven zodat we weten waar de fout ligt.
+NR  PAGINA          FUNCTIE         FOUTCODE

@@ -1,0 +1,33 @@
+<%- include('../partials/header') -%>
+
+<%-include('../partials/admin/nav')-%>
+<div class="card">
+    <div class="card-header">
+        <h1>Activatie pagina</h1>
+    </div>
+    <div class="card-body">
+        <div class="mx-auto">
+
+        <!-- Hier word het breedte invoer vak toegevoegd-->
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Gebruikers om te activeren</th>
+                </tr>
+            </thead>
+            <tbody id="referentiesTableBody">
+                <% usersData.forEach(user => { %>
+                <tr>
+                    <td><a href="/admin/activate/<%= user.email %>"><%= user.bedrijf %></a></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+</div>
+
+<%-include('../partials/admin/navend')-%>
+<%- include('../partials/footer') -%>

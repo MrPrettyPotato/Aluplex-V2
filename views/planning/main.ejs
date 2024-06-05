@@ -1,0 +1,54 @@
+<%-include('../partials/header')-%>
+
+<!-- een tabel met de volgende headers
+leverdatum,weekdag,klant,aantal,producttype,referentie,orderstatus -->
+<div>
+    <h1 class="text-center"> Planning</h1>
+</div>
+
+<div class="row justify-content-center">
+    <td>
+        <table  class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Leverdatum</th>
+                    <th scope="col">Weekdag</th>
+                    <th scope="col">Klant</th>
+                    <th scope="col">Aantal</th>
+                    <th scope="col">Producttype</th>
+                    <th scope="col">Referentie</th>
+                    <th scope="col">Orderstatus</th>
+                </tr>
+            </thead>
+            <tbody id="planning">
+                <!--
+                   de planning data wordt hier ingeladen via de back-end.
+                   de data zit in een array genaamd "planning" en wordt hier in een for loop
+                     doorheen gelopen. De data wordt in de tabel gezet.
+                     deze word toegeboegd zoals dit voorbeeld: 
+                -->
+                <% console.log(planning) %>
+
+                <% for (var i = 0; i < planning.length; i++) { %>
+                    <tr>
+                        <td><%= planning[i].leverdatum %></td>
+                        <td><%= planning[i].weekdag %></td>
+                        <td><%= planning[i].klant %></td>
+                        <td><%= planning[i].aantal %></td>
+                        <td><%= planning[i].producttype %></td>
+                        <td><%= planning[i].referentie %></td>
+                        <td><%= planning[i].orderstatus %></td>
+                    </tr>
+                <% } %>
+                
+            
+            </tbody>
+        </table>
+    </td>
+</div>
+
+
+
+
+
+<%-include('../partials/footer')-%>

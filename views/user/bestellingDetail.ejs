@@ -1,0 +1,50 @@
+<%- include('../partials/header') -%>
+
+<div class="container mt-4">
+  <div class="mb-4">
+    
+<div class="card">
+    <h1 class="display-5">Details van Bestelling %></h1>
+    <h2 class="display-5">O/Ref.: <%= bestellingen[0].bestellingRefNr %></h2>
+    <h2 class="display-5">U/Ref.: <%= bestellingen[0].uref %></h2>
+    </div>
+    <br>
+    <a href="/bestelling" class="btn btn-custom">Terug</a>
+  </div>
+
+  <div class="table-responsive" id="bestellingenTabel">
+    <table class="table table-hover align-middle ">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Aantal</th>
+          <th scope="col">Naam</th>
+          <th scope="col">Omschrijving</th>
+          <th scope="col">Bruto (€)</th>
+          <th scope="col">Korting (%)</th>
+          <th scope="col">Netto (€)</th>
+          <!-- Voeg andere kolommen toe indien nodig -->
+        </tr>
+      </thead>
+      <tbody>
+        <% bestellingen.forEach(bestelling => { %>
+        <tr>
+          <td><%= bestelling.aantal %></td>
+          <td><%= bestelling.ref %></td>
+          <td><%= bestelling.klant %></td>
+          <td><%= bestelling.type %></td>
+          <!-- Voeg andere kolommen toe indien nodig -->
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const bestelling = '<%- JSON.stringify(bestellingen) %>';
+  const user = '<%= req.session.user.bedrijf %>';
+</script>
+
+<script src="/js/bestellingRefDetail.js"></script>
+
+<%- include('../partials/footer') -%>

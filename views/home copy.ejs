@@ -1,0 +1,58 @@
+<%-include('partials/header')-%>
+<div class="jumbotron text-center">
+  <h1 class="display-4">Welkom bij ALUPLEX Production NV</h1>
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-md-6 d-flex">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Over ons</h5>
+            <p class="card-text">ALUPLEX is fabrikant en groothandel van rolluiken, zonwering en vliegenramen voor installateurs, raamfabrikanten, zelfstandige handelaars en andere professionelen.</p>
+            <p class="card-text">ALUPLEX is reeds meer dan 20 jaar actief in de branche en is uitgegroeid tot een familiaal bedrijf waar de 2e generatie,</p>
+            <p class="card-text">die de kennis en de producten 'met de paplepel' ingegoten heeft gekregen, zichzelf én ALUPLEX heeft klaargestoomd voor de toekomst.</p>
+            <a href="#" class="btn btn-primary">Lees meer</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex">
+        <div class="card">
+          <img src="/img/home/vzr.jpg" class="card-img-top img-fluid" alt="Fictieve afbeelding">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-2">
+        <div class="card">
+          <img src="/img/home/imgloungefino.png" class="card-img-top" alt="Fictieve afbeelding">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card">
+          <img src="/img/home/imgloungepiano.png" class="card-img-top" alt="Fictieve afbeelding">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card">
+          <img src="/img/home/imgloungescreen.png" class="card-img-top" alt="Fictieve afbeelding">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Onze producten</h5>
+            <p class="card-text">Ontdek ons uitgebreide assortiment aan producten, van voorzetrolluiken tot zonnetenten. Kwaliteit en innovatie staan bij ons voorop.</p>
+            <a href="#" class="btn btn-primary">Lees meer</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <hr class="my-4">
+  <% if (!req.session.user) { %>
+    <p>Meld u nu aan of registreer u om onze producten te bekijken en te bestellen</p>
+    <a class="btn btn-primary btn-lg" href="/login" role="button">Aanmelden</a>
+    <a class="btn btn-secondary btn-lg" href="/register" role="button">Registreer</a>
+  <% } else { %>
+    <p>Welkom <%= req.session.user.bedrijf %></p>
+  <% } %>
+</div>
+<%-include('partials/footer')-%>

@@ -1,0 +1,84 @@
+<!-- invoer velden voor het toevoegen van data aan de planning database-->
+<%-include('../partials/header')-%>
+<div class="row justify-content-center">
+
+    <div class="col-6">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3 class="text-center"> Planning invoer </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form action="/planning/planning" method="POST">
+
+                    <div class="form-group">
+
+                        <label for="leverdatum"> Leverdatum </label>
+
+                        <input type="date" class="form-control" id="leverdatum" name="leverdatum">
+
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="klant"> Klant </label>
+
+                        <input type="text" class="form-control" id="klant" name="klant">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="aantal"> Aantal </label>
+
+                        <input type="number" class="form-control" id="aantal" name="aantal">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="producttype"> Producttype </label>
+
+                        <input type="text" class="form-control" id="producttype" name="producttype">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="referentie"> Referentie </label>
+
+                        <input type="text" class="form-control" id="referentie" name="referentie">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="orderstatus"> Orderstatus </label>
+
+                        <input type="text" class="form-control" id="orderstatus" name="orderstatus">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"> Submit </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<%-include('../partials/footer')-%>
+<!--
+
+ -->

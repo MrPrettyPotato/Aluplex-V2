@@ -1,0 +1,66 @@
+<%- include('partials/header') -%>
+
+
+<!-- Hero Section with Background Image -->
+<section id="home" class=" text-white text-center bg-light">
+    <div class="container py-5">
+        <h1 class="display-3 font-weight-bold">Sitemap</h1>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="sitemap" class="py-5">
+    <div class="container">
+        <!-- Services Cards  -->
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card-body text-center">
+                    <div class="card-title">
+
+                    </div>
+                    <hr class="my-4"><style>
+                        .sitemap {
+                            text-align: left;
+                            margin: 5px 0 !important;
+                            padding: 0px !important;
+                            font-size: 12px !important;
+                            list-style-type: none !important;
+                            position: relative;
+                            display: block; /* Zorgt ervoor dat de links onder elkaar komen te staan */
+                        }
+                    
+                        .sitemap::before {
+                            content: "\2022";
+                            /* Unicode voor een bolletje */
+                            display: inline-block;
+                            width: 1em;
+                            /* Ruimte tussen het bolletje en de tekst */
+                            margin-right: 0.5em;
+                            position: absolute;
+                            left: -1em; /* Plaats het bolletje 1em naar links vanaf de rand van de paragraaf */
+                        }
+                    
+                        /* Inspringen voor subpagina's */
+                        .subpage {
+                            margin-left: 20px !important; /* Verander deze waarde naar wens */
+                        }
+                    </style>
+                    
+                    <a class="sitemap" href="/#">Home</a>
+                    <a class="sitemap" href="/productfolders">Onze producten ​</a>
+                    <a class="sitemap subpage" href="/#subpagina1">Subpagina 1</a>
+                    <a class="sitemap subpage" href="/#subpagina2">Subpagina 2</a>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- Call to Action for User Registration -->
+
+<%- include('partials/footer') -%>

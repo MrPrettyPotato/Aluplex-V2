@@ -1,0 +1,169 @@
+<%-include('../partials/header')-%>
+<style>
+    .clickborstelContainer {
+      position: relative;
+      width: 150px; /* Pas de grootte aan uw behoefte aan */
+      height: 150px;
+      border: 2px solid black;
+      /* margin: 20px auto; */
+      margin-top: 40px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .clickborstelcheckbox {
+      position: absolute;
+      margin: 0; /* Verwijder margin rond de checkbox */
+    }
+  
+    /* Labels styling */
+    .clickborstellabel {
+      position: absolute;
+      display: block;
+      text-align: center;
+    }
+  
+    .boven { top: -20px; left: 50%; transform: translateX(-50%); }
+    .bovenlabel { top: 5px; left: 50%; transform: translateX(-50%); }
+    .onder { bottom: -20px; left: 50%; transform: translateX(-50%); }
+    .onderlabel { bottom: 5px; left: 50%; transform: translateX(-50%); }
+    .links { left: -20px; top: 50%; transform: translateY(-50%); }
+    .linkslabel { left: 10px; top: 50%; transform: translateY(-50%); }
+    .rechts { right: -20px; top: 50%; transform: translateY(-50%); }
+    .rechtslabel { right: 10px; top: 50%; transform: translateY(-50%); }
+      /* Zorgt ervoor dat de tekst niet selecteerbaar is voor betere UX */
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+  }
+  </style>
+<script>
+    var klant = JSON.parse('<%-JSON.stringify(req.session.user)%>')
+</script>
+<h1>Vliegenraam</h1>
+<div class="container calculator">
+    <div class="form-group" id="refPositie">
+        <input type="text" class="form-control" id="refPositieInput" placeholder="Positie">
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control" id="aantalInput" oninput="changeAantal(this.value)"
+            placeholder="Aantal">
+    </div>
+    <div class="form-group" id="breedteInputDIV" style="display: none;">
+        <!-- Hier word het breedte invoer vak toegevoegd-->
+        <input type="number" class="form-control" id="breedteInput" oninput="changeBreedte(this.value)"
+            placeholder="Breedte">
+    </div>
+    <div class="form-group" id="hoogteInputDIV" style="display: none;">
+        <!-- Hier word het hoogte invoer vak toegevoegd-->
+        <input type="number" class="form-control" id="hoogteInput" oninput="changeHoogte(this.value)"
+            placeholder="Hoogte">
+    </div>
+
+    <div id="afwerkingDIV" class = "form-group" style="display: none;">
+      
+       
+    </div>
+
+    <div id="dikteProfielDIV" class = "form-group" style="display: none;">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="dikteProfielType" value="10mm"
+                onchange="changeDikteProfiel(value)" id="dikteProfiel10mm">
+            <label class="form-check-label" for="dikteProfiel10mm">
+                10 mm
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="dikteProfielType" value="16mm"
+                onchange="changeDikteProfiel(value)" id="dikteProfiel16mm">
+            <label class="form-check-label" for="dikteProfiel16mm">
+                16 mm
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="dikteProfielType" value="25mm"
+                onchange="changeDikteProfiel(value)" id="dikteProfiel25mm">
+            <label class="form-check-label" for="dikteProfiel25mm">
+                25 mm
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="dikteProfielType" value="40mm"
+                onchange="changeDikteProfiel(value)" id="dikteProfiel40mm">
+            <label class="form-check-label" for="dikteProfiel40mm">
+                40 mm
+            </label>
+        </div>
+       
+    </div>
+
+
+    <div id="typeGaasDIV" class="form-group" style="display: none;">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="typegaas" value="standaard"
+                onchange="changeTypeGaas(value)" id="typegaas1">
+            <label class="form-check-label" for="typegaas1">
+                Standaard (grijs)
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="typegaas" value="clearview"
+                onchange="changeTypeGaas(value)" id="typegaas2">
+            <label class="form-check-label" for="typegaas2">
+                Clearview (zwart)
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="typegaas" value="petscreenzwart"
+                onchange="changeTypeGaas(value)" id="typegaas3">
+            <label class="form-check-label" for="typegaas13">
+                Petscreen zwart
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="typegaas" value="petscreengrijs"
+                onchange="changeTypeGaas(value)" id="typegaas4">
+            <label class="form-check-label" for="typegaas4">
+                petscreen grijs
+            </label>
+        </div>
+    </div>
+    <div id="kleurProfielDIV"  class="form-group" style="display: none;">
+
+
+
+    </div>
+
+    <div id="kleurRalProfielDIV"  class="form-group" style="display: none;">
+        <input type="text" class="form-control" id="kleurRalProfiel" oninput="filterRalkleuren(this.value)"
+            placeholder="Kleur">
+
+    </div>
+
+    <div id="typeClipsDIV" class="form-group" style="display: none;">
+<label>Type clips</label>
+    </div>
+
+    <div id="grootteClipsDIV" class="form-group" style="display: none;">
+        <label>Grootte</label>
+    </div>
+
+
+    <div class="wwButton form-group mt-4 mb-4" id="addToCartBtnDIV" style="display: none;">
+        <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addAndStay()">Toevoegen aan
+            winkelmand
+            en op formulier blijven</button>
+        <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addAndGo()">Toevoegen en naar
+            winkelmand</button>
+    </div>
+    </div>
+
+ 
+    <script type='module' src="js/vliegenramen/vliegenraam.js"></script>
+    <%-include('../partials/footer')-%>

@@ -1,0 +1,159 @@
+<%-include('partials/header')-%>
+<script>
+  var klant = JSON.parse('<%-JSON.stringify(req.session.user)%>')
+</script>
+<h1>Inbouwrolluik </h1>
+<div class="container calculator">
+  <div class="form-group" id="refPositie">
+    <input type="text" class="form-control" id="refPositieInput" placeholder="Positie">
+  </div>
+  <div class="form-group">
+    <input type="number" class="form-control" id="aantalInput" placeholder="Aantal">
+  </div>
+  <div class="form-group" id="breedteInputDIV" style="display: none;">
+    <!-- Hier word het breedte invoer vak toegevoegd-->
+    <input type="number" class="form-control" id="breedteInput" placeholder="Breedte">
+  </div>
+  <div class="form-group" id="hoogteInputDIV" style="display: none;">
+    <!-- Hier word het hoogte invoer vak toegevoegd-->
+    <input type="number" class="form-control" id="hoogteInput" placeholder="Hoogte">
+  </div>
+  <div class="form-group" id="typeAfwerkingDIV" style="display:none;">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="value1" name="flexRadioDefault" id="flexRadioDefault1">
+      <label class="form-check-label" for="flexRadioDefault1">
+
+      </label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="value2" name="flexRadioDefault" id="flexRadioDefault2"
+        checked>
+      <label class="form-check-label" for="flexRadioDefault2">
+
+      </label>
+    </div>
+  </div>
+  <div class="form-group" id="typeLamelDIV" style="display:none;">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="value1" name="flexRadioDefault" id="flexRadioDefault1">
+      <label class="form-check-label" for="flexRadioDefault1">
+
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="value2" name="flexRadioDefault" id="flexRadioDefault2"
+        checked>
+      <label class="form-check-label" for="flexRadioDefault2">
+
+      </label>
+    </div>
+  </div>
+  <div class="form-group" id="kleurLamelDIV" style="display:none;">
+
+  </div>
+  <div class="form-group" id="uitvoeringbladDIV" style="display:none;">
+
+  </div>
+  <div class="form-group" id="kleurOnderlatDIV" style="display:none;">
+
+  </div>
+  <div id="test" style="display:block">
+    <div class="form-group" id="kleurOnderlatRalDIV">
+    </div>
+
+    <div class="form-group" id="typebedieningDIV" style="display:none;">
+      <div class="form-group">
+        <span style="font-weight: bold;">Type bediening</span>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" value="manueel" name="typebediening"
+          onchange="typebedieningChange(value)" id="manueel">
+        <label class="form-check-label" for="manueel" style="margin-left:30px">
+          Manueel
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" value="schakelaar" name="typebediening"
+          onchange="typebedieningChange(value)" id="schakelaar">
+        <label class="form-check-label" for="schakelaar" style="margin-left:30px">
+          Motor met schakelaar
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" value="afstandsbediening" name="typebediening"
+          onchange="typebedieningChange(value)" id="afstandsbediening">
+        <label class="form-check-label" for="afstandsbediening" style="margin-left:30px">
+          Motor met afstandsbediening
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" id="bedieningDIV" style="display:none;">
+
+    </div>
+    <div class="form-group" id="zender1DIV" style="display:none;">
+      <p> Zenders1</p>
+    </div>
+    <div class="form-group" id="zender1aantalDIV" style="display:none;">
+      <p> Zenders1aantal</p>
+    </div>
+    <div class="form-group" id="zender2DIV" style="display:none;">
+      <p> Zenders2</p>
+    </div>
+    <div class="form-group" id="zender2aantalDIV" style="display:none;">
+      <p> Zenders2aantal</p>
+    </div>
+    <div class="form-group" id="zender3DIV" style="display:none;">
+      <p> Zenders3</p>
+    </div>
+    <div class="form-group" id="zender3aantalDIV" style="display:none;">
+      <p> Zenders3aantal</p>
+    </div>
+
+    <div class="form-group" id="lintoptiesDIV" style="display:none;">
+    </div>
+
+   
+
+
+
+
+    <div class="form-group" id="bedieningAfstandsbedieningDIV" style="display:none;">
+
+    </div>
+    <div class="form-group" id="schakelaaroptiesDIV" style="display:none;">
+    </div>
+    <div class="form-group" id="afstandsbedieningoptiesDIV" style="display:none;">
+      
+
+    </div>
+
+
+
+    <div class="form-group" id="meerprijsDIV" style="display:none;">
+      <p> Meerprijs</p>
+    </div>
+  
+    <div class="form-group" id="typeOphangveerDIV" style="display:none;">
+
+
+
+    </div>
+    <div class="form-group" id="aanslagtopDIV" style="display:none;">
+
+
+    </div>
+    <div class="wwButton form-group mt-4 mb-4" id="addToCartBtnDIV" style="display: none;">
+      <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addToCartAndStay()">Toevoegen aan winkelmand
+        en op formulier blijven</button>
+      <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addAndGoToCart()">Toevoegen en naar
+        winkelmand</button>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+    <script type='module' src="../js/tradirolluik.js"></script>
+    <script type='module' src="../js/rolluikbladmodules/importData.js"></script>
+    <%-include('partials/footer')-%>

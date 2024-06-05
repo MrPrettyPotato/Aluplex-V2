@@ -1,0 +1,207 @@
+<%-include('partials/header')-%>
+<script>
+    var klant = JSON.parse('<%-JSON.stringify(req.session.user)%>')
+</script>
+<h1>Voorzetrolluik </h1>
+<div class="container calculator">
+    <!-- POSITIE-->
+
+    <div class="form-group" id="refpositieDIV">
+        <input type="text" class="form-control" id="refPositieInput" placeholder="Positie"
+            onchange="positieChange(value)">
+    </div>
+
+    <!-- AANTAL-->
+    <div class="form-group" id="aantalDIV">
+        <label id="aantallabel" style="display: none;color:red"></label>
+        <input type="number" class="form-control" id="aantalInput" placeholder="Aantal">
+    </div>
+    <!-- BREEDTE-->
+    <div class="form-group" id="breedteInputDIV" style="display: none;">
+        <label id="breedtelabel" style="display: none;color:red"></label>
+        <!-- Hier word het breedte invoer vak toegevoegd-->
+        <input type="number" class="form-control" id="breedteInput" placeholder="Breedte">
+    </div>
+
+    <!-- HOOGTE-->
+    <div class="form-group" id="hoogteInputDIV" style="display: none;">
+        <label id="hoogtelabel" style="display: none;color:red"></label>
+        <!-- Hier word het hoogte invoer vak toegevoegd-->
+        <input type="number" class="form-control" id="hoogteInput" placeholder="Hoogte">
+    </div>
+
+    <!-- AFWERKING-->
+
+    <div class="form-group" id="typeAfwerkingDIV" style="display:none;">
+
+    </div>
+    <div class="form-group" id="typeAfwerking" style=" padding-left: 40px;">
+        <div class="form-group" id="typeAfwerkingdag" style="display:none;">
+            <!-- toevoegen van checkboxen-->
+            <span style="font-weight: bold;">Type afwerking opties</span>
+
+            <div class="form-check" id="typeafwerkingdagDIV">
+                <input class="form-check-input" type="checkbox" value="kast" name="typeafwerking"
+                    onchange="typeAfwerkingdagchange(value)" id="kast">
+                <label class="form-check-label" for="kast" style="margin-left:30px">
+                    Kast
+                </label>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- TYPE BEDIENING GROUP-->
+    <div class="form-group" id="typelintofmotorDIV" style="display:none;">
+        <div class="form-group">
+            <span style="font-weight: bold;">Type bediening</span>
+        </div>
+        <!-- MANUEEL-->
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="manueel" name="typebediening"
+                onchange="typelintofmotorchange(value)" id="manueel">
+            <label class="form-check-label" for="manueel" style="margin-left:30px">
+                Manueel
+            </label>
+        </div>
+
+        <!-- SCHAKELAAR-->
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="schakelaar" name="typebediening"
+                onchange="typelintofmotorchange(value)" id="schakelaar">
+            <label class="form-check-label" for="schakelaar" style="margin-left:30px">
+                Motor met schakelaar
+            </label>
+        </div>
+
+        <!-- AFSTANSBEDIENING-->
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="afstandsbediening" name="typebediening"
+                onchange="typelintofmotorchange(value)" id="afstandsbediening">
+            <label class="form-check-label" for="afstandsbediening" style="margin-left:30px">
+                Motor met afstandsbediening
+            </label>
+        </div>
+
+        <!-- AFSTANSBEDIENING SOLAR-->
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="afstandsbediening" name="typebediening"
+                onchange="typelintofmotorchange(value)" id="afstandsbedieningsolar">
+            <label class="form-check-label" for="afstandsbedieningsolar" style="margin-left:30px">
+                SOLAR Motor met afstandsbediening
+            </label>
+        </div>
+    </div>
+    <!-- OPTIES BEDIENING aka TYPE MOTOR/LINT-->
+    <div class="form-group" id="typebedieningDIV" style="display:none;">
+    </div>
+    <div class="form-group" id="kastbinnenbuitenDIV" style="display: none;">
+<span>Kast binnen/buiten</span>
+    </div>
+
+
+
+
+
+
+
+    <!-- OPTIES BEDIENING aka ZENDERS,SCHAKELAARS,ETC-->
+    <div class="form-group" id="bedieningDIV" style="display:none;">
+    </div>
+    
+
+
+    <div class="form-group" id="typelamelDIV" style="display:none;">
+        <label>show typelamel</label>
+
+    </div>
+ 
+    
+
+    <!-- KLEURLAMEL-->
+    <div class="form-group" id="kleurlamelDIV" style="display:none;">
+    </div>
+    <div class="form-group" id="uitvoeringbladDIV" style="display:none;">
+        <span>Uitvoering blad</span>
+
+    </div>
+    <!-- KLEUR KAST-->
+    <div class="form-group" id="kleurkastDIV" style="display:none;">
+    </div>
+
+    <!-- KLEUR KAST RAL-->
+    <div class="form-group" id="kleurkastralDIV" style="display:none;">
+
+    </div>
+
+    <!-- KLEUR KAST RAL-->
+    <div class="form-group" id="typegeleiderLinksDIV" style="display:none;">
+
+    </div>
+    <!-- KLEUR KAST RAL-->
+    <div class="form-group" id="typegeleiderRechtsDIV" style="display:none;">
+
+    </div>
+
+    <div id="bedieningskanterror" style="display:none">
+        <span style="color: red; font-size: 10px; font-weight: bold;">Je hebt nog geen bedieningskant geselecteerd, of
+            de selectie is aangepast door het aanpassen van de bediening.</span>
+    </div>
+    <div class="form-group" id="bedieningskantDIV" style="display:none;">
+
+    </div>
+
+    <div class="form-group" id="geleiderstoppenDIV" style="display:none;">
+        <div class="form-group">
+            <span style="font-weight: bold;">Geleiderstop?</span>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="ja" name="geleiderstop"
+                onchange="geleiderstopChange(value)" id="geleiderstopja">
+            <label class="form-check-label" for="geleiderstopja" style="margin-left:30px">
+                Ja
+            </label>
+        </div>
+
+        <!-- AFSTANSBEDIENING SOLAR-->
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="nee" name="geleiderstop"
+                onchange="geleiderstopChange(value)" id="geleiderstopnee">
+            <label class="form-check-label" for="geleiderstopnee" style="margin-left:30px">
+                Nee
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group" id="kastgrootteKiezenDIV">
+
+    </div>
+    <div class="form-group" id="opmerkingDIV" style="display:none;">
+        <label for="opmerking">Opmerking</label>
+        <textarea class="form-control" id="opmerking" rows="3" onchange="opmerkingChange(value)"></textarea>
+
+    </div>
+
+
+
+
+
+
+    <div id="errorLog" style="display:none">
+        <!-- TYPELAMEL-->
+    </div>
+    <div class="wwButton form-group mt-4 mb-4" id="addToCartBtnDIV" style="display: none;">
+        <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addToCartAndStay()">Toevoegen aan
+            winkelmand
+            en op formulier blijven</button>
+        <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addAndGoToCart()">Toevoegen en naar
+            winkelmand</button>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+    <script type='module' src="../js/voorzetrolluik.js"></script>
+    <script type='module' src="../js/rolluikbladmodules/importData.js"></script>
+    <%-include('partials/footer')-%>

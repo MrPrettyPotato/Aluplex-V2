@@ -1,0 +1,28 @@
+<%- include('../../partials/header') -%>
+
+<%-include('../../partials/account/nav')-%>
+
+<div class="container" id="planningTable">
+
+    <div class="container" id="planningContainer">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Leverdatum</th>
+                    <th>Referentie</th>
+                    <th>Aantal</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="planningTableBody">
+                <!-- De inhoud van de tabel wordt dynamisch gevuld -->
+            </tbody>
+        </table>
+    </div>
+    
+
+
+<script src="/js/user/account/planning.js"></script>
+<%-include('../../partials/account/navend')-%>
+<%- include('../../partials/footer') -%>

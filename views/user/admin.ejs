@@ -1,0 +1,18 @@
+<%-include('../partials/header')-%>
+<!-- Voeg toe aan head-sectie -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+
+<!-- Voeg toe aan body-sectie (onderaan) -->
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+
+
+<h1 class="text-center"> Admin</h1>
+</div>
+<table id="myTable" class="display">
+</table>
+
+<script>
+    const user = '<%=req.session.user.bedrijf%>'
+</script>
+<script src="./js/admin.js"></script>
+<%-include('../partials/footer')-%>

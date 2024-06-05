@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+</head>
+<body>
+    <h1>Order Management</h1>
+
+    <div>
+        <h2>Page 1: Order Input</h2>
+        <!-- Invoervelden -->
+        <label for="leverdatum">Leverdatum:</label>
+        <input type="date" id="leverdatum" required><br>
+
+        <label for="klant">Klant:</label>
+        <input type="text" id="klant" required><br>
+
+        <label for="klantenlijst">Klantenlijst:</label>
+        <select id="klantenlijst" required>
+            <!-- Vul hier de klantenlijst dynamisch in -->
+            <option value="Klant1">Klant1</option>
+            <option value="Klant2">Klant2</option>
+            <option value="Klant3">Klant3</option>
+        </select><br>
+
+        <label for="referentie">Referentie:</label>
+        <input type="text" id="referentie" required><br>
+
+        <label for="productNummer">Product Nummer:</label>
+        <input type="text" id="productNummer" required><br>
+
+        <label for="aantal">Aantal:</label>
+        <input type="number" id="aantal" required><br>
+
+        <label for="productType">Product Type:</label>
+        <select id="productType" required>
+            <!-- Vul hier de producttypes dynamisch in -->
+            <option value="Type1">Type1</option>
+            <option value="Type2">Type2</option>
+            <option value="Type3">Type3</option>
+        </select><br>
+
+        <label for="orderstatus">Orderstatus:</label>
+        <select id="orderstatus" required>
+            <!-- Vul hier de orderstatussen dynamisch in -->
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+        </select><br>
+
+        <label for="leverancier">Leverancier:</label>
+        <select id="leverancier" required>
+            <!-- Vul hier de leveranciers dynamisch in -->
+            <option value="Aluplex">Aluplex</option>
+            <option value="Feneko">Feneko</option>
+            <option value="Leiner">Leiner</option>
+            <option value="Building">Building</option>
+            <option value="Sunconfex">Sunconfex</option>
+        </select><br>
+
+        <label for="opmerking">Opmerking:</label><br>
+        <textarea id="opmerking" rows="4" cols="50"></textarea><br>
+
+        <button onclick="addOrder()">Toevoegen</button>
+    </div>
+
+    <div>
+        <h2>Page 2: Order Table</h2>
+        <button onclick="loadOrders('Algemeen')">Algemeen</button>
+        <button onclick="loadOrders('Aluplex')">Aluplex</button>
+        <button onclick="loadOrders('Feneko')">Feneko</button>
+        <button onclick="loadOrders('Leiner')">Leiner</button>
+        <button onclick="loadOrders('Building')">Building</button>
+        <button onclick="loadOrders('Sunconfex')">Sunconfex</button>
+
+        <table id="orderTable" border="1">
+            <!-- Vul hier de tabelheader in -->
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('updateOrders', (orders) => {
+            updateOrderTable(orders);
+        });
+
+        function addOrder() {
+            const leverdatum = document.getElementById('leverdatum').value;
+            const klant = document.getElementById('klant').value;
+            const klantenlijst = document.getElementById('klantenlijst').value;
+            const referentie = document.getElementById('referentie').value;
+            const productNummer = document.getElementById('productNummer').value;
+            const aantal = document.getElementById('aantal').value;
+            const productType = document.getElementById('productType').value;
+            const orderstatus = document.getElementById('orderstatus').value;
+            const leverancier = document.getElementById('leverancier').value;
+            const opmerking = document.getElementById('opmerking').value;
+
+            const newOrder = {
+                leverdatum,
+                klant,
+                klantenlijst,
+                referentie,
+                productNummer,
+                aantal,
+                productType,
+                orderstatus,
+                leverancier,
+                opmerking
+            };
+
+            $.post('/addOrder', newOrder, (response) => {
+                console.log(response);
+            });
+        }
+
+        function loadOrders(leverancier) {
+        if (leverancier === 'Algemeen') {
+            socket.emit('joinRoom', 'Algemeen'); // Voeg de client toe aan de 'Algemeen'-room
+        socket.emit('loadOrders', 'Algemeen');
+        } else {
+            socket.emit('joinRoom', leverancier); // Voeg de client toe aan een room met de naam van de leverancier
+        socket.emit('loadOrders', leverancier);
+        }
+    }
+
+    function updateOrderTable(orders) {
+    const table = document.getElementById('orderTable');
+    table.innerHTML = ''; // Leeg de tabel voordat we deze opnieuw vullen
+
+    // Vul hier de tabelheader in
+    const headerRow = table.insertRow(0);
+    const headers = ['Leverdatum', 'Klant', 'Referentie', 'Product Nummer', 'Aantal', 'Product Type', 'Orderstatus', 'Opmerking'];
+    headers.forEach(headerText => {
+        const header = document.createElement('th');
+        header.textContent = headerText;
+        headerRow.appendChild(header);
+    });
+
+    // Vul de tabel met orders
+    orders.forEach((order, index) => {
+        const row = table.insertRow(index + 1);
+        const cells = ['leverdatum', 'klant', 'referentie', 'productNummer', 'aantal', 'productType', 'orderstatus', 'opmerking'];
+
+        cells.forEach((cellName, cellIndex) => {
+            const cell = row.insertCell(cellIndex);
+            
+            // Check of het de 'orderstatus'-cel is
+            if (cellName === 'orderstatus') {
+                // Maak een dropdown-menu voor orderstatus
+                const dropdown = document.createElement('select');
+                dropdown.name = 'orderstatus';
+                const statusOptions = ['Pending', 'Shipped', 'Delivered'];
+                statusOptions.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status;
+                    option.text = status;
+                    dropdown.appendChild(option);
+                });
+
+                // Selecteer de huidige status van de order in de dropdown
+                dropdown.value = order[cellName];
+
+                // Voeg een event listener toe om wijzigingen in de dropdown op te vangen
+                dropdown.addEventListener('change', function() {
+                    // Roep een functie aan om de wijziging naar de server door te geven
+                    updateOrderStatus(order.id, dropdown.value);
+                });
+
+                cell.appendChild(dropdown);
+            } else {
+                // Voeg de normale tekst toe aan de cel
+                cell.textContent = order[cellName];
+            }
+        });
+    });
+}
+function updateOrderStatus(orderId, newStatus) {
+    // Stuur een bericht naar de server om de orderstatus bij te werken
+    socket.emit('updateOrderStatus', { orderId, newStatus });
+}
+
+
+        function createOrderRow(order) {
+    const row = document.createElement('tr');
+
+    // Creëer cellen met bewerkbare velden
+    const editableCells = ['leverdatum', 'klant', 'referentie', 'productNummer', 'aantal', 'productType', 'orderstatus', 'opmerking'];
+    editableCells.forEach(cellName => {
+        const cell = document.createElement('td');
+        if (cellName === 'orderstatus') {
+            // Voeg een dropdown toe voor orderstatus
+            const statusDropdown = document.createElement('select');
+            statusDropdown.classList.add('order-status-dropdown');
+            // Voeg hier opties toe zoals 'Pending', 'Shipped', 'Delivered'
+            // Gebruik order.orderstatus om de huidige waarde in te stellen
+            // ...
+            cell.appendChild(statusDropdown);
+        } else if (cellName === 'productNummer') {
+            // Voeg een tekstvak toe voor productnummer
+            const productNummerInput = document.createElement('input');
+            productNummerInput.type = 'text';
+            productNummerInput.value = order.productNummer;
+            productNummerInput.addEventListener('change', () => updateOrderField(order, 'productNummer', productNummerInput.value));
+            cell.appendChild(productNummerInput);
+        } else {
+            // Voeg gewone tekstvelden toe voor andere cellen
+            const textNode = document.createTextNode(order[cellName]);
+            cell.appendChild(textNode);
+        }
+        row.appendChild(cell);
+    });
+
+    return row;
+}
+    </script>
+</body>
+</html>

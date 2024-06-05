@@ -1,0 +1,72 @@
+<%- include('../partials/header') -%>
+
+<div class="card">
+<h1>OFFERTES</h1>
+</div>
+<div class="mx-auto" style="width: 50%;">
+        <!-- Hier word het breedte invoer vak toegevoegd-->
+        <br>
+    <table class="table table-hover">
+        <% if(user.login === 2) {%>
+            <thead class="custom-thead-color">
+                <tr>
+                    <th>U/Ref.:</th>
+                    <th>Klant :</th>
+                </tr>
+            </thead>
+            <tbody id="referentiesTableBody">
+                <% offertesRefNr.forEach((offerte,index) => { %>
+                    <tr data-href="/offertes/ref/<%= offerte %>">
+                        <td><%= offerte %> - <%= uRef[index] %></td>
+                        <td><%= klant[index] %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+            <% } else {%>
+                <thead class="custom-thead-color">
+                    <tr>
+                        <th>U/Ref.:</th>
+                    </tr>
+                </thead>
+                <tbody id="referentiesTableBody">
+                    <% offertesRefNr.forEach((offerte,index) => { %>
+                        <tr data-href="/offertes/ref/<%= offerte %>">
+                            <td><%= offerte %> - <%= uRef[index] %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+                <%}%>
+       
+    </table>
+</div>
+<script>
+    function filterData() {
+        // Haal de waarde op die is ingevoerd in het input-veld
+        var inputValue = document.getElementById('fdata').value.toLowerCase(); // Maak de invoer niet-hoofdlettergevoelig
+
+        // Selecteer de tbody waar de referenties worden weergegeven
+        var tableBody = document.getElementById('referentiesTableBody');
+
+        // Ga door elk rij-element en verberg of toon op basis van de filterwaarde
+        Array.from(tableBody.children).forEach(row => {
+            var referentieTekst = row.querySelector('a').innerText.toLowerCase(); // Maak de referentie niet-hoofdlettergevoelig
+            if (referentieTekst.includes(inputValue)) {
+                row.style.display = ''; // Toon de rij als de referentie overeenkomt
+            } else {
+                row.style.display = 'none'; // Verberg de rij als de referentie niet overeenkomt
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+  // Voeg een klik-event listener toe aan elke rij in de tabel met een data-href attribuut
+  document.querySelectorAll('tr[data-href]').forEach(row => {
+    row.addEventListener('click', function() {
+      // Navigeer naar de URL in het data-href attribuut van de rij
+      window.location.href = this.dataset.href;
+    });
+  });
+});
+</script>
+
+<%- include('../partials/footer') -%>

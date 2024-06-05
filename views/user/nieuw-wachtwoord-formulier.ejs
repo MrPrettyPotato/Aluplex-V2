@@ -1,0 +1,99 @@
+<%- include('../partials/header') -%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nieuw Wachtwoord Invoeren</title>
+</head>
+<style>
+     .nieuwWachtwoordFormulier {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* height: 100vh; Optioneel, zodat het formulier in het midden van het scherm staat */
+    }
+
+    .nieuwWachtwoordFormulier form {
+        width: 80%; /* Dit zorgt ervoor dat je form 80% breed is */
+    }
+</style>
+<body>
+    <div class="nieuwWachtwoordFormulier">
+        <h2>Nieuw Wachtwoord Invoeren</h2>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="alert alert-success" role="alert">
+                <%= message %>
+            </div>
+        <% } %>
+
+        <form id="passwordForm" method="POST">
+            <input type="hidden" name="email" value="<%= email %>"> <!-- Gebruikers-ID als verborgen inputveld -->
+            <div class="form-group">
+                <label for="password">Wachtwoord:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+            </div>
+            <button type="submit">Wachtwoord Wijzigen</button>
+        </form>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var togglePassword = document.getElementById('togglePassword');
+        var password = document.getElementById('password');
+
+        // Voeg een event listener toe aan de knop om het wachtwoord te toggle
+        togglePassword.addEventListener('click', function() {
+            var type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Verander het icoon op basis van het wachtwoordtype
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('passwordForm');
+        form.onsubmit = async function(e) {
+            e.preventDefault(); // Voorkom dat het formulier op de traditionele manier wordt ingediend
+    
+            var formData = new FormData(form);
+            var object = {};
+            formData.forEach((value, key) => object[key] = value);
+            var json = JSON.stringify(object);
+    
+            var response = await fetch('/login/nieuw-wachtwoord', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json
+            });
+            var result = await response.json();
+    
+            if (result.success) {
+                // Toon de succesmelding
+                alert(result.message); // Of update de DOM met een aangepaste melding
+    
+                // Wacht 3 seconden en redirect dan naar de homepage
+                setTimeout(function() {
+                    window.location.href = '/login';
+                }, 1000);
+            } else {
+                // Toon een foutmelding indien nodig
+                alert('Er is een fout opgetreden.');
+            }
+        };
+    });
+    </script>
+<%- include('../partials/footer') -%>

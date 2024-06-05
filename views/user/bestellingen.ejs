@@ -1,0 +1,634 @@
+<%- include('../partials/header') -%>
+<!-- <meta http-equiv="refresh" content="30"> -->
+
+
+<div class="mx-auto" style="width: 80%;">
+    <div class="card" style="margin: 50px 10px; padding:20px 0px">
+        <h1> BESTELLINGEN</h1>
+    </div> 
+     <div>
+        <button class="btn btn-primary" onclick="showremoveold()" id="showhidebutton" style="margin-bottom:15px">
+            geleverde/afgehaalde bestellingen weergeven
+        </button>
+    </div>
+    <!-- Hier word het breedte invoer vak toegevoegd-->
+    <% if(user.login === 2) {%>
+  
+    <div class="row">
+        <div class="col-2">
+            <button id="btnAlgemeen" class="btn btn-primary"
+                onclick="loadNieuweBestelling('Algemeen','<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>')">Algemeen</button>
+        </div>
+        <div class="col-2">
+            <button id="btnAluplex" class="btn btn-primary"
+                onclick="loadNieuweBestelling('ALUPLEX','<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>')">Aluplex</button>
+        </div>
+        <div class="col-2">
+            <button id="btnFeneko" class="btn btn-primary"
+                onclick="loadNieuweBestelling('FENEKO','<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>')">Feneko</button>
+        </div>
+        <div class="col-2">
+            <button id="btnLeiner" class="btn btn-primary"
+                onclick="loadNieuweBestelling('LEINER','<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>')">Leiner</button>
+        </div>
+        <div class="col-2">
+            <button id="btnBuilding" class="btn btn-primary"
+                onclick="loadNieuweBestelling('BUILDING','<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>')">Building</button>
+        </div>
+        <div class="col-2">
+            <button id="btnSunconfex" class="btn btn-primary"
+                onclick="loadNieuweBestelling('SUNCONFEX','<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>')">Sunconfex</button>
+        </div>
+
+    </div>
+    <%}%>
+
+    <input type="text" class="form-control" id="fdata"
+        oninput="loadNieuweBestelling(null,'<%= JSON.stringify(bestellingen) %>','<%=JSON.stringify(user)%>',value)"
+    placeholder="filter op referentie">
+    <br>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width:8%">Leverdatum</th>
+                <th style="width:10%">Referentie</th>
+                <th style="width:3%">Aantal</th>
+                <th style="width:5%">Type</th>
+                <th style="width:15%">Opmerking Klant</th>
+                <th style="width:15%">Status</th>
+                <% if(user.login !== 2) { %>
+                <th style="width:5%">Actie</th> <% }%>
+                <% if(user.login === 2) {%>
+                <th style="width:8%">Product Nummer</th>
+                <th style="width:10%">Planningopmerking</th>
+                <th style="width:5%">Actie</th>
+                <th style="width:5%">Lever optie</th>
+                <th style="width:10%">Klant</th>
+                <% } %>
+            </tr>
+        </thead>
+        <tbody id="referentiesTableBody">
+            <% if(user.login === 2) { %>
+            <% bestellingen.forEach(bestelling => {   %>
+
+            <tr>
+                <td><input id="leverdatum<%= bestelling.ID%>" type="text" class="form-control"
+                        value="<%= bestelling.leverdatum %>"></td>
+                <td><input id="ref<%= bestelling.ID%>" type="text" class="form-control" value="<%= bestelling.uref %>">
+                </td>
+                <td><%= bestelling.aantal %></td>
+                <td><%= bestelling.type %></td>
+                <td><textarea id="opmerking<%= bestelling.ID%>" type="text"
+                        class="form-control"><%= bestelling.opmerkingKlant %></textarea> </td>
+                <td>
+                    <select name="planningStatus" id="planningStatus<%= bestelling.ID %>" class="form-control"
+                        onchange="updateBackgroundColor(this)">
+                        <option value="Nog af te handelen"
+                            <%= bestelling.planningStatus == "Nog af te handelen" ? "selected" : "" %>>Nog af te
+                            handelen
+                        </option>
+                        <option value="In productie"
+                            <%= bestelling.planningStatus == "In productie" ? "selected" : "" %>>In productie
+                        </option>
+                        <option value="In bestelling"
+                            <%= bestelling.planningStatus == "In bestelling" ? "selected" : "" %>>In bestelling
+                        </option>
+                        <option value="In lakkerij" <%= bestelling.planningStatus == "In lakkerij" ? "selected" : "" %>>
+                            In lakkerij
+                        </option>
+                        <option value="Klaar voor levering/afhaling"
+                            <%= bestelling.planningStatus == "Klaar voor levering/afhaling" ? "selected" : "" %>>Klaar
+                            voor levering/afhaling
+                        </option>
+                        <option value="Geleverd/afgehaald"
+                            <%= bestelling.planningStatus == "Geleverd/afgehaald" ? "selected" : "" %>>
+                            Geleverd/afgehaald
+                        </option>
+
+                    </select>
+                </td>
+
+
+                <td><input id="prodnummer<%= bestelling.ID%>" type="text" class="form-control"
+                        value="<%= bestelling.prodnummer %>"> </td>
+                <td><textarea id="opmerkingPlanning<%= bestelling.ID%>" type="text"
+                        class="form-control"><%= bestelling.opmerkingPlanning %></textarea> </td>
+                <td>
+                    <img src="/img/detail.png" alt="Detail" style="width: 50px; height: 50px"
+                        onclick="window.location='/bestelling/ref/<%= bestelling.bestellingRefNr %>/<%= bestelling.type %>';">
+                    <img src="/img/edit.png" alt="Edit" style="width: 50px; height: 50px fit content"
+                        onclick="editData('<%=bestelling.ID%>','<%=bestelling.bestellingRefNr%>','leverdatum<%= bestelling.ID %>', 'ref<%= bestelling.ID %>', '<%=bestelling.type%>','planningStatus<%= bestelling.ID %>','prodnummer<%= bestelling.ID %>','opmerkingPlanning<%= bestelling.ID %>','opmerking<%= bestelling.ID %>','leveren<%= bestelling.ID %>');">
+                </td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="leveren<%= bestelling.ID %>" checked>
+
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Afhalen?
+                        </label>
+                    </div>
+                </td>
+                <td><%=bestelling.klant%></td>
+            </tr>
+
+            <% }) %>
+            <% } else {%>
+            <% bestellingen.forEach(bestelling => {%>
+            <% var planningStatus = "nog te bepalen"%>
+            <% if(bestelling.planningStatus == "In productie" || bestelling.planningStatus == "In bestelling" || bestelling.planningStatus == "In lakkerij") { %>
+            <% planningStatus = "In productie"  %>
+            <% } else { %>
+            <% planningStatus = bestelling.planningStatus%>
+            <%}%>
+            <tr>
+            <td><%= bestelling.leverdatum || "Nog te bepalen" %> </td>
+            <td><%= bestelling.uref || "Nog te bepalen"%> </td>
+            <td><%= bestelling.aantal %> </td>
+            <td><%= bestelling.type %> </td>
+            <td><textarea id="opmerking<%= bestelling.ID%>" type="text" class="form-control"
+                    disabled><%= bestelling.opmerkingKlant %></textarea> </td>
+            <td><%= planningStatus %> </td>
+            <td style="display: none">
+                <select name="planningStatus" id="planningStatus<%= bestelling.ID %>" class="form-control"
+                    onchange="updateBackgroundColor(this)">
+                    <option value="Nog af te handelen" <%= planningStatus == "Nog af te handelen" ? "selected" : "" %>>
+                        Nog af te handelen
+                    </option>
+                    <option value="In productie" <%= planningStatus == "In productie" ? "selected" : "" %>>In productie
+                    </option>
+                    <option value="Klaar voor levering/afhaling"
+                        <%= planningStatus == "Klaar voor levering/afhaling" ? "selected" : "" %>>Klaar voor
+                        levering/afhaling
+                    </option>
+                    <option value="Geleverd/afgehaald" <%= planningStatus == "Geleverd/afgehaald" ? "selected" : "" %>>
+                        Geleverd/afgehaald
+                    </option>
+
+                </select>
+            </td>
+            </tr>
+
+            <% }) %>
+            <%} %>
+
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    /**
+     *       <img src="/img/excel icon.png" alt="excel" style="width: 50px; height: 50px fit content" onclick="exceltest('${bestelling.ID}','${bestelling.bestellingRefNr}','leverdatum${ bestelling.ID }', 'ref${ bestelling.ID }','${bestelling.type}', 'planningStatus${ bestelling.ID }','prodnummer${bestelling.ID}','opmerkingPlanning${bestelling.ID}','opmerking${bestelling.ID}','leveren${bestelling.ID}');">
+                      
+     */
+    let isTyping = false;
+    var bestellingenString = '<%- JSON.stringify(bestellingen) %>';
+    var bestellingen = JSON.parse(bestellingenString);
+    const userString = '<%-JSON.stringify(user)%>';
+    const user = JSON.parse(userString);
+    console.log('bestellingen', bestellingen);
+    var oudeStatus = null
+
+    function setupInputListeners() {
+        // Voeg event listeners toe aan alle input elementen
+        document.querySelectorAll('input, textarea').forEach(element => {
+            element.addEventListener('focus', () => {
+                isTyping = true;
+            });
+            element.addEventListener('blur', () => {
+                isTyping = false;
+            });
+        });
+    }
+
+    function refreshPage(timeout) {
+        setTimeout(function () {
+            if (!isTyping) {
+                window.location.reload(true); // Forceer een volledige herlaad van de pagina
+            } else {
+                // Probeer opnieuw na een extra timeout als de gebruiker nog steeds aan het typen is
+                refreshPage(timeout);
+            }
+        }, timeout);
+    }
+
+    // Installeer input listeners zodra de pagina klaar is met laden
+    document.addEventListener('DOMContentLoaded', setupInputListeners);
+
+    // Start het periodieke refresh proces
+    // refreshPage(3000); // 30 seconden
+
+
+    var huidigeLeverancier = null;
+
+    window.onload = function () {
+
+        // Stel de waarden van de select-elementen in en pas de achtergrondkleur aan
+        loadElementToUpdate();
+    }
+
+    function loadElementToUpdate() {
+        console.log('loadElementToUpdate gestart')
+        const elements = document.getElementsByName('planningStatus');
+        console.log('elements', elements)
+        elements.forEach(Element => {
+            // console.log('Element', Element)
+            // console.log('elements', Element.options)
+            const options = Element.options
+            // console.log('options', options)
+            updateBackgroundColor(Element); // Werk de achtergrondkleur bij tijdens het la
+        })
+    }
+
+    function updateBackgroundColor(selectElement) {
+        // console.log('selectElement', selectElement, selectElement.value)
+        var row = selectElement.closest('tr');
+        // console.log('row', row)
+        switch (selectElement.value) {
+            case 'Nog af te handelen':
+                row.style.backgroundColor = '#f78181'; // Geen kleur
+                break;
+            case 'In productie':
+                row.style.backgroundColor = 'transparent'; // Geen kleur
+                break;
+            case 'Klaar voor levering/afhaling':
+                row.style.backgroundColor = 'yellow'; // Kleur voor Optie 2
+                break;
+            case 'Geleverd/afgehaald':
+                row.style.backgroundColor = '#abfa8c'; // Kleur voor Optie 3
+                break;
+            case 'In lakkerij':
+                row.style.backgroundColor = '#8cc5fa'; // Kleur voor Optie 3
+                break;
+            case 'In bestelling':
+                row.style.backgroundColor = 'orange'; // Kleur voor Optie 3
+                break;
+            default:
+                row.style.backgroundColor = 'transparent'; // Geen kleur
+                break;
+        }
+    }
+
+
+    async function loadNieuweBestelling(leverancier, bestellingenString, userString, inputString = "") {
+        if (leverancier != null) {
+            huidigeLeverancier = leverancier;
+        }
+        console.log("inpoutString", inputString)
+        const bestellingen = JSON.parse(bestellingenString);
+        const user = JSON.parse(userString);
+        const leverancierData = await filterLeverancier(huidigeLeverancier, bestellingen);
+        console.log('leverancierData', leverancierData);
+        const nieuweBestellingData = await filterBestellingenOpInvoer(leverancierData, inputString)
+        var tableBody = document.getElementById('referentiesTableBody');
+        tableBody.innerHTML = ''; // Maak de tabel leeg
+        var row;
+        nieuweBestellingData.forEach((bestelling, index) => {
+
+            if (user.login === 2) {
+                console.log('bestelling', bestelling.klant, )
+                row = `<tr >
+                        <td><input id="leverdatum${bestelling.ID}" type="text" class="form-control" value="${ bestelling.leverdatum }"></td>
+                        <td><input id="ref${ bestelling.ID}" type="text" class="form-control" value="${ bestelling.uref }"></td>
+                        <td>${ bestelling.aantal }</td>
+                        <td>${ bestelling.type }</td>
+                        <td><textarea  id="opmerking${ bestelling.ID}" type="text" class="form-control">${ bestelling.opmerkingKlant?bestelling.opmerkingKlant:"" }</textarea> </td>
+                        <td>
+                            <select name="planningStatus" id="planningStatus${ bestelling.ID }" class="form-control" onchange="updateBackgroundColor(this)">
+                                <option value="Nog af te handelen" ${ bestelling.planningStatus == "Nog af te handelen" ? "selected" : "" }>Nog af te handelen
+                        </option>
+                                <option value="In productie" ${bestelling.planningStatus == "In productie" ? "selected" : "" }>In productie
+                        </option>
+                        <option value="In bestelling" ${ bestelling.planningStatus == "In bestelling" ? "selected" : "" }>In bestelling
+                        </option>
+                        <option value="In lakkerij" ${ bestelling.planningStatus == "In lakkerij" ? "selected" : "" }>In lakkerij
+                        </option>
+                        <option value="Klaar voor levering/afhaling" ${ bestelling.planningStatus == "Klaar voor levering/afhaling" ? "selected" : "" }>Klaar voor levering/afhaling
+                        </option>
+                        <option value="Geleverd/afgehaald" ${ bestelling.planningStatus == "Geleverd/afgehaald" ? "selected" : "" }>Geleverd/afgehaald
+                        </option>
+                       
+                            </select>
+                          </td>
+                        <td><input id="prodnummer${ bestelling.ID}" type="text" class="form-control" value="${ bestelling.prodnummer?bestelling.prodnummer:"" }"> </td>
+                        <td><textarea  id="opmerkingPlanning${ bestelling.ID}" type="text" class="form-control">${ bestelling.opmerkingPlanning?bestelling.opmerkingPlanning:"" }</textarea> </td>
+                        <td>
+                            <img class="cursor-pointer" src="/img/detail.png" alt="Detail" style="width: 50px; height: 50px" onclick="window.location='/bestelling/ref/${ bestelling.bestellingRefNr }/${ bestelling.type }';">
+                            <img class="cursor-pointer" src="/img/edit.png" alt="Edit" style="width: 50px; height: 50px fit content" onclick="editData('${bestelling.ID}','${bestelling.bestellingRefNr}','leverdatum${ bestelling.ID }', 'ref${ bestelling.ID }','${bestelling.type}', 'planningStatus${ bestelling.ID }','prodnummer${bestelling.ID}','opmerkingPlanning${bestelling.ID}','opmerking${bestelling.ID}','leveren${bestelling.ID}');">
+                        </td> 
+                        <td>
+                            
+                            <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="leveren${bestelling.ID}" ${(bestelling.afhalen === 1) ? "checked" : ""}>
+  <label class="form-check-label" for="flexCheckDefault">
+    Afhalen?
+  </label>
+</div></td>
+
+<td>${bestelling.klant}</td>
+                            </tr>`
+
+            } else {
+                var planningStatus = "nog te bepalen"
+                if (bestelling.planningStatus == "In productie" || bestelling.planningStatus ==
+                    "In bestelling" || bestelling.planningStatus == "In lakkerij") {
+                    planningStatus = "In productie"
+                } else {
+                    planningStatus = bestelling.planningStatus
+                }
+                row = `<tr>
+                                <td>${ bestelling.leverdatum || "Nog te bepalen" } </td>
+                                <td>${ bestelling.uref || "Nog te bepalen"} </td>
+                                <td>${ bestelling.aantal } </td>
+                                <td>${ bestelling.type } </td>
+                                <td><textarea  id="opmerking${ bestelling.ID}" type="text" class="form-control">${ bestelling.opmerkingKlant?bestelling.opmerkingKlant:"" }</textarea> </td>
+                                <td>${ planningStatus } </td>
+                                <td style="display: none;">
+                                    <select name="planningStatus" id="planningStatus${ bestelling.ID }" class="form-control" onchange="updateBackgroundColor(this)" >
+                                        <option value="Nog af te handelen" ${ bestelling.planningStatus == "Nog af te handelen" ? "selected" : "" }>Nog af te handelen
+                        </option>
+                                        <option value="In productie" ${ planningStatus == "In productie" ? "selected" : "" }>In productie
+                        </option>
+                        <option value="Klaar voor levering/afhaling" ${ planningStatus == "Klaar voor levering/afhaling" ? "selected" : "" }>Klaar voor levering/afhaling
+                        </option>
+                        <option value="Geleverd/afgehaald" ${ planningStatus == "Geleverd/afgehaald" ? "selected" : "" }>Geleverd/afgehaald
+                        </option>
+                                    </select>
+                                    </td>
+                                    <td>
+                                        
+                            <img class="cursor-pointer" src="/img/detail.png" alt="Detail" style="width: 50px; height: 50px" onclick="window.location='/bestelling/ref/${ bestelling.bestellingRefNr }/${ bestelling.type }';">
+                            </td>
+                            </tr>`;
+            }
+
+            tableBody.innerHTML += row; // Voeg de rij toe aan de tabel
+            console.log('index', index, 'bestellingen', bestellingen.length);
+            if (nieuweBestellingData.length - 1 === index) {
+                console.log('Updating elements');
+                loadElementToUpdate();
+            }
+
+        });
+
+
+
+    }
+    window.loadNieuweBestelling = loadNieuweBestelling;
+
+    function filterLeverancier(leverancier, bestellingen) {
+        console.log('leverancier', leverancier, 'bestellingen', bestellingen);
+        if (leverancier === '' || leverancier === 'Algemeen' || leverancier === null) {
+            return bestellingen; // Return alle bestellingen als er geen specifieke filter is
+        } else {
+            let newBestellingen = bestellingen.filter(bestelling => bestelling.leverancier === leverancier);
+            console.log('gefilterde bestellingen', newBestellingen);
+            return newBestellingen; // Return gefilterde bestellingen
+        }
+    }
+    var filterOpPlanningStatus = true
+
+    function filterBestellingenOpInvoer(bestellingen, inputValue) {
+        console.log('Bestellingen', bestellingen);
+        console.log('inputValue', inputValue);
+        console.log('filterOpPlanningStatus', filterOpPlanningStatus);
+        inputValue = inputValue.toLowerCase(); // Maak de invoer niet-hoofdlettergevoelig
+
+        return bestellingen.filter(bestelling => {
+            // Controleer of we moeten filteren op planningStatus
+            if (filterOpPlanningStatus && bestelling.planningStatus === "Geleverd/afgehaald") {
+
+            } else {
+                // Verzamel alle relevante velden in een enkele string
+                let referentieTekst = [
+                    bestelling.leverdatum,
+                    bestelling.uref,
+                    bestelling.aantal.toString(),
+                    bestelling.type,
+                    bestelling.opmerking,
+                    bestelling.planningStatus,
+                    bestelling.klant
+                ].join(' ').toLowerCase();
+
+                // Filter logica
+                return referentieTekst.includes(inputValue);
+            }
+
+
+        });
+
+
+    }
+
+    function showremoveold() {
+        console.log('showremoveold gestart')
+        filterOpPlanningStatus = !filterOpPlanningStatus
+        loadNieuweBestelling(null, '<%- JSON.stringify(bestellingen) %>', '<%-JSON.stringify(user)%>')
+
+        var button = document.getElementById('showhidebutton');
+        if (filterOpPlanningStatus) {
+            button.textContent = 'geleverde/afgehaalde bestellingen weergeven';
+        } else {
+            button.textContent = 'geleverde/afgehaalde bestellingen verbergen';
+        }
+    }
+    window.showremoveold = showremoveold
+
+
+    function filterData() {
+        var inputValue = document.getElementById('fdata').value
+            .toLowerCase(); // Maak de invoer niet-hoofdlettergevoelig
+        var tableBody = document.getElementById('referentiesTableBody');
+
+        Array.from(tableBody.children).forEach(row => {
+            // Vind alle input elementen in de rij
+            const inputs = row.querySelectorAll('input');
+
+            // Verkrijg de tekstwaarden van de input elementen
+            let inputValuesText = Array.from(inputs).map(input => input.value).join(' ').toLowerCase();
+
+            // Voeg ook de tekst binnen de td elementen toe, exclusief de inputs
+            let rowText = Array.from(row.querySelectorAll('td:not(:has(input))')).map(td => td.textContent)
+                .join(' ').toLowerCase();
+
+            // Combineer de tekst van de inputs en de overige td's voor volledige rij tekst
+            var referentieTekst = rowText + ' ' + inputValuesText;
+
+            // Filter logica
+            if (referentieTekst.includes(inputValue)) {
+                row.style.display = ''; // Toon de rij als de referentie overeenkomt
+            } else {
+                row.style.display = 'none'; // Verberg de rij als de referentie niet overeenkomt
+            }
+        });
+    }
+
+    function test() {
+        loadNieuweBestelling('Algemeen', '<%- JSON.stringify(bestellingen) %>', '<%-JSON.stringify(user)%>')
+    }
+    test()
+
+
+    async function editData(ID, bestellingRefNr, leverdatumString, referentieString, typeString, planningstatusString,
+        prodnummer, opmerkingPlanning, opmerking, afhalen) {
+        //log alle parameters met benaming bij.
+        console.log("ID", ID, "bestellingRefNr", bestellingRefNr, "leverdatumString", leverdatumString,
+            "referentieString", referentieString, "typeString", typeString, "planningstatusString",
+            planningstatusString, "prodnummer", prodnummer, "opmerkingPlanning", opmerkingPlanning, "opmerking",
+            opmerking)
+        console.log("EDIT DATA - ID", ID, "ref", bestellingRefNr);
+        var leverdatum = document.getElementById(leverdatumString).value;
+        var referentie = document.getElementById(referentieString).value;
+        var planningStatus = document.getElementById(planningstatusString).value;
+        var prodNummer = document.getElementById(prodnummer).value;
+        var opmPlanning = document.getElementById(opmerkingPlanning).value;
+        var opm = document.getElementById(opmerking).value;
+        var type = typeString;
+        var _afhalen = document.getElementById(afhalen).checked;
+        console.log('leverdatum', leverdatum, 'referentie', referentie, 'planningStatus', planningStatus, 'type',
+            type, 'prodNummer', prodNummer, 'opmPlanning', opmPlanning, 'opm', opm);
+
+        try {
+            const response = await fetch('/bestelling/editBestelling', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: {
+                        ID: ID,
+                        oldref: bestellingRefNr,
+                        uref: referentie,
+                        bestellingRefNr: bestellingRefNr,
+                        leverdatum: leverdatum,
+                        planningStatus: planningStatus,
+                        type: type,
+                        prodnummer: prodNummer,
+                        opmerkingPlanning: opmPlanning,
+                        opmerking: opm,
+                        afhalen: _afhalen
+                    }
+                })
+            });
+
+            const data = await response.json();
+            console.log('data', data);
+            if (data.succes) {
+                console.log('data', data);
+                const files = data.files
+                console.log('files', files)
+                alert(data.message);
+                if(files === undefined){
+                    console.log('Geen files gevonden')
+                    return;
+                }
+                
+            for (const file of files) {
+                console.log()
+                const fileResponse = await fetch(`/bestelling/downloadExcel?path=${encodeURIComponent(file.path)}`);
+                if (!fileResponse.ok) {
+                    throw new Error(`Error downloading file ${file.filename}`);
+                }
+
+                const blob = await fileResponse.blob();
+                saveAs(blob, file.filename);
+            }
+                // Update de rij in de tabel met nieuwe gegevens
+                const row = document.querySelector(`tr[data-id="${ID}"]`);
+                if (row) {
+                    row.querySelector(`#leverdatum${ID}`).value = leverdatum;
+                    row.querySelector(`#ref${ID}`).value = referentie;
+                    row.querySelector(`#planningStatus${ID}`).value = planningStatus;
+                    row.querySelector(`#prodnummer${ID}`).value = prodNummer;
+                    row.querySelector(`#opmerkingPlanning${ID}`).value = opmPlanning;
+                    row.querySelector(`#opmerking${ID}`).value = opm;
+                    updateBackgroundColor(document.getElementById(`planningStatus${ID}`));
+                }
+
+                // Update de lokale 'bestellingen' variabele
+                const bestellingIndex = bestellingen.findIndex(best => best.ID === ID);
+                if (bestellingIndex !== -1) {
+                    bestellingen[bestellingIndex] = {
+                        ...bestellingen[bestellingIndex],
+                        leverdatum: leverdatum,
+                        bestellingRefNr: bestellingRefNr,
+                        planningStatus: planningStatus,
+                        type: type,
+                        prodnummer: prodNummer,
+                        opmerkingPlanning: opmPlanning,
+                        opmerking: opm
+                    };
+                }
+            } else {
+                alert(data.message);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Er is een fout opgetreden bij het bewerken van de bestelling.');
+        }
+    }
+
+
+
+
+    async function exceltest(ID, bestellingRefNr, leverdatumString, referentieString, typeString, planningstatusString,
+        prodnummer, opmerkingPlanning, opmerking, afhalen) {
+        //log alle parameters met benaming bij.
+        console.log("ID", ID, "bestellingRefNr", bestellingRefNr, "leverdatumString", leverdatumString,
+            "referentieString", referentieString, "typeString", typeString, "planningstatusString",
+            planningstatusString, "prodnummer", prodnummer, "opmerkingPlanning", opmerkingPlanning, "opmerking",
+            opmerking)
+        console.log("EDIT DATA - ID", ID, "ref", bestellingRefNr);
+        var leverdatum = document.getElementById(leverdatumString).value;
+        var referentie = document.getElementById(referentieString).value;
+        var planningStatus = document.getElementById(planningstatusString).value;
+        var prodNummer = document.getElementById(prodnummer).value;
+        var opmPlanning = document.getElementById(opmerkingPlanning).value;
+        var opm = document.getElementById(opmerking).value;
+        var type = typeString;
+        var _afhalen = document.getElementById(afhalen).checked;
+        console.log('leverdatum', leverdatum, 'referentie', referentie, 'planningStatus', planningStatus, 'type',
+            type, 'prodNummer', prodNummer, 'opmPlanning', opmPlanning, 'opm', opm);
+
+        try {
+            const response = await fetch('/bestelling/testExcel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: {
+                        bestellingRefNr: bestellingRefNr,
+                        type: type
+                    }
+                })
+            });
+
+            const data = await response.json();
+            console.log('files', files)
+            for (const file of files) {
+                console.log()
+                const fileResponse = await fetch(`/bestelling/downloadExcel?path=${encodeURIComponent(file.path)}`);
+                if (!fileResponse.ok) {
+                    throw new Error(`Error downloading file ${file.filename}`);
+                }
+
+                const blob = await fileResponse.blob();
+                saveAs(blob, file.filename);
+            }
+        } catch (error) {
+            console.error('There was an error downloading the files:', error);
+        }
+    }
+
+    function saveAs(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+<%- include('../partials/footer') -%>

@@ -1,0 +1,110 @@
+<%-include('partials/header')-%>
+<script>
+    var klant = JSON.parse('<%-JSON.stringify(req.session.user)%>')
+</script>
+<h1>Screens </h1>
+<div class="container calculator">
+
+    <!-- POSITIE-->
+
+    <div class="form-group" id="refpositieDIV">
+        <input type="text" class="form-control" id="refPositieInput" placeholder="Rolluik Positie">
+    </div>
+
+    <!-- AANTAL-->
+    <div class="form-group" id="aantalDIV">
+        <label id="aantallabel" style="display: none;color:red"></label>
+        <input type="number" class="form-control" id="aantalInput" placeholder="Aantal" oninput="aantalonChange(value)">
+    </div>
+    <!-- BREEDTE-->
+    <div class="form-group" id="breedteInputDIV" style="display: none;">
+        <label id="breedtelabel" style="display: none;color:red"></label>
+        <!-- Hier word het breedte invoer vak toegevoegd-->
+        <input type="number" class="form-control" id="breedteInput" placeholder="Breedte" oninput ="breedteonChange(value)">
+    </div>
+
+    <!-- HOOGTE-->
+    <div class="form-group" id="hoogteInputDIV" style="display: none;">
+        <label id="hoogtelabel" style="display: none;color:red"></label>
+        <!-- Hier word het hoogte invoer vak toegevoegd-->
+        <input type="number" class="form-control" id="hoogteInput" placeholder="Hoogte" oninput="hoogteonChange(value)">
+    </div>
+
+    <!-- AFWERKING-->
+
+    <div class="form-group" id="typeafwerkingDIV" style="display:none;">
+
+    </div>
+    <div class="form-group" id="typeAfwerkingdag" style="display:none;">
+        <!-- toevoegen van checkboxen-->
+        <span style="font-weight: bold;">Type afwerking opties</span>
+
+        <div class="form-check" id="typeafwerkingdagDIV">
+            <input class="form-check-input" type="checkbox" value="kast" name="typeafwerking"
+                onchange="typeAfwerkingdagchange(value)" id="kast">
+            <label class="form-check-label" for="kast" style="margin-left:30px">
+                Kast
+            </label>
+        </div>
+
+        
+    </div>
+
+ 
+  
+    <!-- OPTIES BEDIENING aka TYPE MOTOR/LINT-->
+    <div class="form-group" id="typebedieningDIV" style="display:none;">
+    </div>
+
+
+
+    <!-- OPTIES BEDIENING aka ZENDERS,SCHAKELAARS,ETC-->
+    <div class="form-group" id="bedieningDIV" style="display:none;">
+
+    </div>
+       <!-- KLEUR KAST RAL-->
+       <div class="form-group" id="bedieningskantDIV" style="display:none;">
+
+       </div>
+   
+    <!-- typedoek-->
+    <div class="form-group" id="typedoekDIV" style="display:none;">
+
+    </div>
+     <!-- typedoek-->
+     <div class="form-group" id="doekDIV" style="display:none;">
+
+     </div>
+     
+ <!-- typedoek-->
+ <div class="form-group" id="confectieDIV" style="display:none;">
+
+ </div>
+    <!-- KLEUR KAST-->
+    <div class="form-group" id="kleurkastDIV" style="display:none;">
+    </div>
+        <!-- KLEUR KAST-->
+        <div class="form-group" id="kleurkastralDIV" style="display:none;">
+        </div>
+
+    
+
+
+
+
+
+
+
+    <div class="wwButton form-group mt-4 mb-4" id="addToCartBtnDIV" style="display: none;">
+        <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addToCartAndStay()">Toevoegen aan
+            winkelmand
+            en op formulier blijven</button>
+        <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="addAndGoToCart()">Toevoegen en naar
+            winkelmand</button>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+    <script type='module' src="../js/screens.js"></script>
+    <%-include('partials/footer')-%>

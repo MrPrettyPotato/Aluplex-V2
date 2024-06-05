@@ -1,0 +1,53 @@
+<%-include('../partials/header')-%>
+<div style="width:80%;" class="mx-auto">
+<div>
+<h1 class="text-center"> Winkelmand</h1>
+</div>
+<% if(user.login === 2){%>
+<div id="klantenlijst" style="margin:15px;">
+    <input class="form-control" placeholder="Filternamen" oninput="loadKlanten(value)" >
+    <select name="klanten" id="klanten" class="form-control" onchange="changeKlant()">
+        </select>
+</div>
+<%}%>
+   
+<div>
+    <div id="referentieText"class="alert alert-danger" role="alert" style="display: none;">
+        Gelieven een referentie in te vullen.
+      </div>
+    <input class="form-control" id="referentie" placeholder="U/Ref.: VB:Jos merksem,Alex Van de Zande, Putte, etc.">
+</div>
+<div class="table-container mx-auto">
+    <table  class="table table-hover">
+        <thead>
+            <tr>
+              <th scope="col">Benaming</th>
+              <th scope="col">Omschrijving</th>
+              <!--<th scope="col">Omschrijving</th>
+              <th scope="col">Bruto (€)</th>
+              <th scope="col">Korting (%)</th>
+              <th scope="col">Netto (€)</th>-->
+            </tr>
+          </thead>
+            <tbody id="winkelmand">
+                <!--
+                    Hier komt de table data
+                -->
+            </tbody>
+    </table>
+    
+</div>
+<div class="float-right">
+    <button class="btn btn-danger" onclick="removeAll()">Winkelmand leegmaken</button>
+
+</div>
+<div>
+    <button class="btn btn-primary" onclick="offerte('bestelling')">Bestellen</button>
+    <button class="btn btn-primary" onclick="offerte('offerte')">Offerte aanvragen</button>
+</div>
+</div>
+<script>
+    const user = '<%=req.session.user%>'
+</script>
+<script src="./js/cart.js"></script>
+<%-include('../partials/footer')-%>

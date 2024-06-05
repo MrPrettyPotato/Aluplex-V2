@@ -1,0 +1,445 @@
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prijslijsten</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 30px;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+        }
+        th {
+            background-color: #000080;
+            color: #ffffff;
+            font-size: 18px;
+            border-bottom: 2px solid #004f7c;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .item-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .link-group {
+            margin-top: 5px;
+            display: flex;
+            gap: 10px;
+        }
+        a {
+            color: #000080;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #1e90ff;
+        }
+        .sticky-nav {
+            margin-top: -40px;
+            position: sticky;
+            top: 107px;
+            z-index: 2;
+            background-color: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+        }
+        .sticky-nav a {
+            margin-right: 20px;
+            color: #000080;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        .sticky-nav a:hover {
+            color: #1e90ff;
+        }
+        .section-title {
+            padding-top: 80px;
+            margin-top: -80px;
+            color: #000080;
+        }
+        .xls-icon, .pdf-icon {
+        display: inline-block;
+        padding: 0;
+        width: 60px;
+        height: 30px;
+        line-height: 30px;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        background-color: #217346; /* Default to Excel-green */
+        transition: transform 0.2s ease-in-out;
+    }
+    .pdf-icon {
+        background-color: #FF0000; /* PDF-red */
+    }
+    .xls-icon:hover, .pdf-icon:hover {
+        transform: scale(1.1);
+    }
+    #mijnHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* Zorgt ervoor dat de header boven andere elementen blijft */
+  background-color: white;
+  /* Optioneel, voor zichtbaarheid */
+}
+</style>
+
+
+</head>
+  <%- include('partials/header' , {loadDefaultCSS: false}) -%>
+  <div class="sticky-nav">
+    <a href="#rolluiken">
+        <img src="/img/prijslijsten/Rolluiken.png" alt="Rolluiken" class="icon"> Rolluiken
+    </a>
+   
+    <a href="#screens">
+        <img src="/img/prijslijsten/Screens.png" alt="Screens" class="icon"> Screens
+    </a>
+    <a href="#zonnetenten">
+        <img src="/img/prijslijsten/Zonnetenten.png" alt="Zonnetenten" class="icon"> Zonnetenten
+    </a>
+    <a href="#verandazonwering">
+      <img src="/img/prijslijsten/Verandazonwering.png" alt="Verandazonwering" class="icon"> Verandazonwering
+  </a>
+  <a href="#vliegenramen">
+    <img src="/img/prijslijsten/Vliegenramen.png" alt="Vliegenramen" class="icon"> Vliegenramen
+</a>
+</div>
+
+<body>
+   
+    <div class="container section py-5">
+        <h1 class="text-center mb-4 section-title">Prijslijsten</h1>
+        <h2 id="rolluiken" class="text-center mb-4 section-title">Rolluiken</h2>
+        <% const rolluiken = {
+            'Rolluikblad': ['PVC 42', 'ALU 42', 'ULTRA 42', 'ULTRA 52', 'PVC 55', 'ALU 55'],
+            'Inbouwrolluik': ['PVC 55', 'ALU 55', 'ULTRA 52'],
+            'Voorzetrolluik': ['PVC 42', 'ALU 42', 'ULTRA 42', 'ULTRA 52'],
+            'Opbouwrolluik': ['ALU 42', 'ULTRA 42']
+        }; %>
+        <% const rolluikenKeys = Object.keys(rolluiken); %>
+        <% for (let i = 0; i < rolluikenKeys.length; i += 2) { %>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <% rolluikenKeys.slice(i, i + 2).forEach(function(category) { %>
+                            <th width="50%"><h3 class="text-center" style="color:#000080;"><%= category %></h3></th>
+                        <% }); %>
+                        <% if (rolluikenKeys.slice(i, i + 2).length < 2) { %>
+                            <% for (let k = 0; k < 2 - rolluikenKeys.slice(i, i + 2).length; k++) { %>
+                                <th width="50%"></th>
+                            <% } %>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% const maxRows = Math.max(...rolluikenKeys.slice(i, i + 2).map(key => rolluiken[key].length)); %>
+                    <% for (let j = 0; j < maxRows; j++) { %>
+                    <tr>
+                        <% rolluikenKeys.slice(i, i + 2).forEach(function(category) { %>
+                            <td>
+                                <% if (rolluiken[category][j]) { %>
+                                    <div class="item-cell">
+                                        <div style="color:#000080; font-weight: bold"><%= rolluiken[category][j] %></div>
+                                        <div class="link-group">
+                                            <a href="/excel/prijslijsten/<%=category%>/<%=category%> <%= rolluiken[category][j] %>.xls" class="xls-icon">Excel</a>
+                                            <a href="/pdf/prijslijsten/<%=category%>/<%=category%> <%= rolluiken[category][j] %>.pdf" class="pdf-icon">PDF</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <div class="item-cell">-</div>
+                                <% } %>
+                            </td>
+                        <% }); %>
+                        <% if (rolluikenKeys.slice(i, i + 2).length < 2) { %>
+                            <% for (let k = 0; k < 2 - rolluikenKeys.slice(i, i + 2).length; k++) { %>
+                                <td><div class="item-cell">-</div></td>
+                            <% } %>
+                        <% } %>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+    </div>
+
+ 
+
+    <div class="container section py-5">
+        <h2 id="screens" class="text-center mb-4 section-title">Screens</h2>
+        <% const screens = {
+            'Lounge 89': ['Motor + schakelaar', 'Somfy IO'],
+            'Lounge 103': ['Motor + schakelaar', 'Somfy IO'],
+            'Lounge 131': ['Motor + schakelaar', 'Somfy IO'],
+            'Lounge 150': ['Somfy Solar IO']
+        }; %>
+        <% const screensKeys = Object.keys(screens); %>
+        <% for (let i = 0; i < screensKeys.length; i += 2) { %>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <% screensKeys.slice(i, i + 2).forEach(function(category) { %>
+                            <th width="50%"><h3 class="text-center" style="color:#000080;"><%= category %></h3></th>
+                        <% }); %>
+                        <% if (screensKeys.slice(i, i + 2).length < 2) { %>
+                            <% for (let k = 0; k < 2 - screensKeys.slice(i, i + 2).length; k++) { %>
+                                <th width="50%"></th>
+                            <% } %>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% const maxRows = Math.max(...screensKeys.slice(i, i + 2).map(key => screens[key].length)); %>
+                    <% for (let j = 0; j < maxRows; j++) { %>
+                    <tr>
+                        <% screensKeys.slice(i, i + 2).forEach(function(category) { %>
+                            <td>
+                                <% if (screens[category][j]) { %>
+                                    <div class="item-cell">
+                                        <div style="color:#000080; font-weight: bold"><%= screens[category][j] %></div>
+                                        <div class="link-group">
+                                            <a href="/excel/prijslijsten/screens/<%= category%> <%= screens[category][j] %>.xlsx" class="xls-icon">Excel</a>
+                                            <a href="/pdf/prijslijsten/screens/<%= category%> <%= screens[category][j] %>.pdf" class="pdf-icon">PDF</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <div class="item-cell">-</div>
+                                <% } %>
+                            </td>
+                        <% }); %>
+                        <% if (screensKeys.slice(i, i + 2).length < 2) { %>
+                            <% for (let k = 0; k < 2 - screensKeys.slice(i, i + 2).length; k++) { %>
+                                <td><div class="item-cell">-</div></td>
+                            <% } %>
+                        <% } %>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+    </div>
+
+    <div class="container section py-5">
+        <h2 id="zonnetenten" class="text-center mb-4 section-title">Zonnetenten</h2>
+        <% const zonnetenten = {
+            'Standaard': ['Lounge Fino & Cento', 'Lounge Como','Lounge Piano','Lounge Casa Sunrain'],
+            'Vario Volant': ['Lounge Fino & Cento Vario Volant', 'Lounge Como Vario Volant', 'Lounge Piano Vario Volant']
+        }; %>
+        <% const zonnetentenKeys = Object.keys(zonnetenten); %>
+        <% for (let i = 0; i < zonnetentenKeys.length; i += 2) { %>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <% zonnetentenKeys.slice(i, i + 2).forEach(function(category) { %>
+                            <th width="50%"><h3 class="text-center" style="color:#000080;"><%= category %></h3></th>
+                        <% }); %>
+                        <% if (zonnetentenKeys.slice(i, i + 2).length < 2) { %>
+                            <% for (let k = 0; k < 2 - zonnetentenKeys.slice(i, i + 2).length; k++) { %>
+                                <th width="50%"></th>
+                            <% } %>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% const maxRows = Math.max(...zonnetentenKeys.slice(i, i + 2).map(key => zonnetenten[key].length)); %>
+                    <% for (let j = 0; j < maxRows; j++) { %>
+                    <tr>
+                        <% zonnetentenKeys.slice(i, i + 2).forEach(function(category) { %>
+                            <td>
+                                <% if (zonnetenten[category][j]) { %>
+                                    <div class="item-cell">
+                                        <div style="color:#000080; font-weight: bold"><%= zonnetenten[category][j] %></div>
+                                        <div class="link-group">
+                                            <a href="/excel/prijslijsten/zonnetenten/<%= zonnetenten[category][j] %>.xlsx" class="xls-icon">Excel</a>
+                                            <a href="/pdf/prijslijsten/zonnetenten/<%= zonnetenten[category][j] %>.pdf" class="pdf-icon">PDF</a>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <div class="item-cell">-</div>
+                                <% } %>
+                            </td>
+                        <% }); %>
+                        <% if (zonnetentenKeys.slice(i, i + 2).length < 2) { %>
+                            <% for (let k = 0; k < 2 - zonnetentenKeys.slice(i, i + 2).length; k++) { %>
+                                <td><div class="item-cell">-</div></td>
+                            <% } %>
+                        <% } %>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+    </div>
+
+    <div class="container section py-5">
+      <h2 id="verandazonwering" class="text-center mb-4 section-title">Verandazonwering</h2>
+      <% const verandazonwering = {
+          'Standaard': ['Lounge WGB 350', 'Lounge WGB 350 SZ'],
+          'pergola': ['Lounge WGB 350 SZ Pergola']
+      }; %>
+      <% const verandazonweringKeys = Object.keys(verandazonwering); %>
+      <% for (let i = 0; i < verandazonweringKeys.length; i += 2) { %>
+      <div class="table-responsive">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <% verandazonweringKeys.slice(i, i + 2).forEach(function(category) { %>
+                          <th width="50%"><h3 class="text-center" style="color:#000080;"><%= category %></h3></th>
+                      <% }); %>
+                      <% if (verandazonweringKeys.slice(i, i + 2).length < 2) { %>
+                          <% for (let k = 0; k < 2 - verandazonweringKeys.slice(i, i + 2).length; k++) { %>
+                              <th width="50%"></th>
+                          <% } %>
+                      <% } %>
+                  </tr>
+              </thead>
+              <tbody>
+                  <% const maxRows = Math.max(...verandazonweringKeys.slice(i, i + 2).map(key => verandazonwering[key].length)); %>
+                  <% for (let j = 0; j < maxRows; j++) { %>
+                  <tr>
+                      <% verandazonweringKeys.slice(i, i + 2).forEach(function(category) { %>
+                          <td>
+                              <% if (verandazonwering[category][j]) { %>
+                                  <div class="item-cell">
+                                      <div style="color:#000080; font-weight: bold"><%= verandazonwering[category][j] %></div>
+                                      <div class="link-group">
+                                          <a href="/excel/prijslijsten/verandazonwering/<%= verandazonwering[category][j] %>.xlsx" class="xls-icon">Excel</a>
+                                          <a href="/pdf/prijslijsten/verandazonwering/<%= verandazonwering[category][j] %>.pdf" class="pdf-icon">PDF</a>
+                                      </div>
+                                  </div>
+                              <% } else { %>
+                                  <div class="item-cell">-</div>
+                              <% } %>
+                          </td>
+                      <% }); %>
+                      <% if (verandazonweringKeys.slice(i, i + 2).length < 2) { %>
+                          <% for (let k = 0; k < 2 - verandazonweringKeys.slice(i, i + 2).length; k++) { %>
+                              <td><div class="item-cell">-</div></td>
+                          <% } %>
+                      <% } %>
+                  </tr>
+                  <% } %>
+              </tbody>
+          </table>
+      </div>
+      <% } %>
+  </div>
+  <div class="container section py-5">
+    <h2 id="vliegenramen" class="text-center mb-4 section-title">Vliegenramen</h2>
+    <% const vliegenramen = {
+        'Vliegenramen': ['10 & 16 mm','25 & 40 mm'],
+        'Vliegendeur': ['Draaideur'],
+        'Schuifvliegendeur': ['Elegance','Elegance+'],
+        "Plissé's": ['Deurplissé','Raamplissé']
+    }; %>
+    <% const vliegenramenKeys = Object.keys(vliegenramen); %>
+    <% for (let i = 0; i < vliegenramenKeys.length; i += 2) { %>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <% vliegenramenKeys.slice(i, i + 2).forEach(function(category) { %>
+                        <th width="50%"><h3 class="text-center" style="color:#000080;"><%= category %></h3></th>
+                    <% }); %>
+                    <% if (vliegenramenKeys.slice(i, i + 2).length < 2) { %>
+                        <% for (let k = 0; k < 2 - vliegenramenKeys.slice(i, i + 2).length; k++) { %>
+                            <th width="50%"></th>
+                        <% } %>
+                    <% } %>
+                </tr>
+            </thead>
+            <tbody>
+                <% const maxRows = Math.max(...vliegenramenKeys.slice(i, i + 2).map(key => vliegenramen[key].length)); %>
+                <% for (let j = 0; j < maxRows; j++) { %>
+                <tr>
+                    <% vliegenramenKeys.slice(i, i + 2).forEach(function(category) { %>
+                        <td>
+                            <% if (vliegenramen[category][j]) { %>
+                                <div class="item-cell">
+                                    <div style="color:#000080; font-weight: bold"><%= vliegenramen[category][j] %></div>
+                                    <div class="link-group">
+                                        <a href="/excel/prijslijsten/vliegenramen/<%= category%> <%= vliegenramen[category][j] %>.xlsx" class="xls-icon">Excel</a>
+                                        <a href="/pdf/prijslijsten/vliegenramen/<%= category%> <%= vliegenramen[category][j] %>.pdf" class="pdf-icon">PDF</a>
+                                    </div>
+                                </div>
+                            <% } else { %>
+                                <div class="item-cell">-</div>
+                            <% } %>
+                        </td>
+                    <% }); %>
+                    <% if (vliegenramenKeys.slice(i, i + 2).length < 2) { %>
+                        <% for (let k = 0; k < 2 - vliegenramenKeys.slice(i, i + 2).length; k++) { %>
+                            <td><div class="item-cell">-</div></td>
+                        <% } %>
+                    <% } %>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <% } %>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const offset = 100;
+            const anchors = document.querySelectorAll('a[href^="#"]');
+
+            anchors.forEach(anchor => {
+                anchor.addEventListener("click", function(event) {
+                    const href = this.getAttribute("href");
+                    const targetElement = document.querySelector(href);
+
+                    if (targetElement) {
+                        event.preventDefault();
+                        const scrollToPosition = targetElement.offsetTop - offset;
+                        window.scrollTo({
+                            top: scrollToPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+<%- include('partials/footer') -%>
+

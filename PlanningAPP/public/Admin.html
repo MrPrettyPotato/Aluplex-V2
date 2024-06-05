@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <!-- Voeg de Bootstrap CSS-link toe -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <button id="toonVerwijderenKnop">Toon Verwijderen</button>
+    <button onclick="input()">Input open/gesloten</button>
+</head>
+
+<body class="container mt-5">
+
+    <div id="inputContainer" style="display: none;">
+        <h1 class="text-center">Planning Software</h1>
+        <div class="mb-5">
+            <h2>Input</h2>
+            <!-- Invoervelden -->
+            <div class="form-group">
+                <label for="leverdatum">Leverdatum:</label>
+                <input type="text" class="form-control" id="leverdatum">
+            </div>
+
+            <div class="form-group">
+                <label for="klant">Klant:</label>
+                <input type="text" class="form-control" id="klant" required>
+            </div>
+
+            <!-- <div class="form-group">
+            <label for="klantenlijst">Klantenlijst:</label>
+            <select class="form-control" id="klantenlijst" required>
+                 Vul hier de klantenlijst dynamisch in 
+                <option value="Klant1">Klant1</option>
+                <option value="Klant2">Klant2</option>
+                <option value="Klant3">Klant3</option>
+            </select>
+        </div> -->
+
+            <div class="form-group">
+                <label for="referentie">Referentie:</label>
+                <input type="text" class="form-control" id="referentie" required>
+
+            </div>
+            <div class="form-group">
+                <label for="productNummer">Product Nummer:</label>
+                <input type="text" class="form-control" id="productNummer">
+            </div>
+            <div class="form-group">
+                <label for="aantal">Aantal:</label>
+                <input type="number" class="form-control" id="aantal" required>
+
+            </div>
+
+            <div class="form-group">
+                <label for="productType">Product Type:</label>
+                <select class="form-control" id="productType" required>
+                    <!-- Vul hier de producttypes dynamisch in -->
+                    <option value="Rolluikblad">Rolluikblad</option>
+                    <option value="Traditioneel">Traditioneel</option>
+                    <option value="Voorzetrolluik">Voorzetrolluik</option>
+                    <option value="Opbouwrolluik">Opbouwrolluik</option>
+                    <option value="Zonnetent">Zonnetent</option>
+                    <option value="Verandazonwering">Verandazonwering</option>
+                    <option value="Screen">Screen</option>
+                    <option value="Automatisatie">Automatisatie</option>
+                    <option value="Onderdelen">Onderdelen</option>
+                    <option value="Vliegenraam">Vliegenraam</option>
+                    <option value="Deurplissé">Deurplissé</option>
+                    <option value="Vliegendeur">Vliegendeur</option>
+                    <option value="Schuifvliegendeur">Schuifvliegendeur</option>
+                    <option value="Raamplissé">Raamplissé</option>
+                    <option value="Doek">Doek</option>
+                    <option value="Divers">Divers</option>
+                </select><br>
+            </div>
+
+            <div class="form-group">
+                <label for="orderstatus">Orderstatus:</label>
+                <select class="form-control" id="orderstatus" required>
+                    <!-- Vul hier de orderstatussen dynamisch in -->
+                    <option value="In productie">In productie</option>
+                    <option value="In bestelling">In bestelling</option>
+                    <option value="In lakkerij">In lakkerij</option>
+                    <option value="Klaar voor levering/afhaling">Klaar voor levering/afhaling</option>
+                </select><br>
+            </div>
+
+            <div class="form-group">
+                <label for="leverancier">Leverancier:</label>
+                <select class="form-control" id="leverancier" required>
+                    <!-- Vul hier de leveranciers dynamisch in -->
+                    <option value="Aluplex">Aluplex</option>
+                    <option value="Feneko">Feneko</option>
+                    <option value="Leiner">Leiner</option>
+                    <option value="Building">Building</option>
+                    <option value="Sunconfex">Sunconfex</option>
+                </select><br>
+            </div>
+
+            <div class="form-group">
+                <label for="opmerking">Opmerking:</label><br>
+                <textarea id="opmerking" rows="4" cols="50"></textarea>
+            </div>
+
+            <button onclick="addOrder()">Toevoegen</button>
+        </div>
+    </div>
+
+    <div>
+        <h2>Planning</h2>
+        <!-- Voeg hier de knoppen toe met Bootstrap-styling -->
+        <button class="btn btn-secondary" onclick="loadOrders('Algemeen')">Algemeen</button>
+        <button class="btn btn-secondary" onclick="loadOrders('Aluplex')">Aluplex</button>
+        <button class="btn btn-secondary" onclick="loadOrders('Feneko')">Feneko</button>
+        <button class="btn btn-secondary" onclick="loadOrders('Leiner')">Leiner</button>
+        <button class="btn btn-secondary" onclick="loadOrders('Building')">Building</button>
+        <button class="btn btn-secondary" onclick="loadOrders('Sunconfex')">Sunconfex</button>
+
+        <table class="table mt-3" id="orderTable">
+            <!-- Vul hier de tabelheader in -->
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        var newLocation = "Algemeen"
+
+        socket.on('updateOrders', (orders) => {
+            updateOrderTable(orders);
+        });
+
+        function formatDate(inputDate) {
+            // Zet de inputdatum (dd/mm/jjjj) om naar jjjj-mm-dd
+            const parts = inputDate.split('/');
+            const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            return formattedDate;
+        }
+
+        function input() {
+            var inputContainer = document.getElementById('inputContainer');
+            console.log("input", inputContainer.style.display)
+            if (inputContainer.style.display === "block") {
+
+                inputContainer.style.display = "none"
+            } else {
+
+                inputContainer.style.display = "block"
+            }
+
+        }
+
+        function addOrder() {
+            const leverdatumInput = document.getElementById('leverdatum');
+            const klantInput = document.getElementById('klant');
+            const referentieInput = document.getElementById('referentie');
+            const productNummerInput = document.getElementById('productNummer');
+            const aantalInput = document.getElementById('aantal');
+            const productTypeInput = document.getElementById('productType');
+            const orderstatusInput = document.getElementById('orderstatus');
+            const leverancierInput = document.getElementById('leverancier');
+            const opmerkingInput = document.getElementById('opmerking');
+
+            // Je kunt deze array aanvullen met andere inputvelden als dat nodig is
+            const inputFields = [leverdatumInput, klantInput, referentieInput, productNummerInput, aantalInput,
+                productTypeInput, orderstatusInput, leverancierInput, opmerkingInput
+            ];
+
+            const newOrder = {
+                leverdatum: leverdatumInput.value,
+                klant: klantInput.value,
+                referentie: referentieInput.value,
+                productNummer: productNummerInput.value,
+                aantal: aantalInput.value,
+                productType: productTypeInput.value,
+                orderstatus: orderstatusInput.value,
+                leverancier: leverancierInput.value,
+                opmerking: opmerkingInput.value
+            };
+
+            $.post('/addOrder', newOrder, (response) => {
+                console.log(response);
+
+                // Leeg de inhoud van alle inputvelden
+                inputFields.forEach(inputField => {
+                    inputField.value = '';
+                });
+
+                // Zet de focus op het "leverdatum"-veld
+                leverdatumInput.focus();
+            });
+        }
+
+
+        function loadOrders(leverancier) {
+            newLocation = leverancier
+            if (leverancier === 'Algemeen') {
+                socket.emit('joinRoom', 'Algemeen'); // Voeg de client toe aan de 'Algemeen'-room
+                socket.emit('loadOrders', 'Algemeen');
+            } else {
+                socket.emit('joinRoom', leverancier); // Voeg de client toe aan een room met de naam van de leverancier
+                socket.emit('loadOrders', leverancier);
+            }
+        }
+
+        // Houd de weergavestatus van de verwijderknoppen bij
+        let showDeleteButtons = false;
+
+        function updateOrderTable(orders) {
+            const table = document.getElementById('orderTable');
+            table.innerHTML = ''; // Leeg de tabel voordat we deze opnieuw vullen
+
+            // Vul hier de tabelheader in
+            const headerRow = table.insertRow(0);
+            const headers = ['Leverdatum', 'Klant', 'Referentie', 'Product Nummer', 'Aantal', 'Product Type',
+                'Orderstatus', 'Opmerking', 'Actie'
+            ];
+            headers.forEach(headerText => {
+                const header = document.createElement('th');
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
+
+            // Vul de tabel met orders
+            orders.forEach((order, index) => {
+                const row = table.insertRow(index + 1);
+                const cells = ['leverdatum', 'klant', 'referentie', 'productNummer', 'aantal', 'productType',
+                    'orderstatus', 'opmerking'
+                ];
+
+                cells.forEach((cellName, cellIndex) => {
+                    const cell = row.insertCell(cellIndex);
+
+                    if (cellName === 'leverdatum' || cellName === 'productNummer' || cellName ===
+                        'opmerking') {
+                        // Maak een tekstvak voor leverdatum, productnummer en opmerking
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = order[cellName];
+                        input.addEventListener('blur', function () {
+                            // Roep een functie aan om de wijziging naar de server door te geven bij het verlaten van het tekstvak
+                            updateOrderField(order.id, cellName, input.value);
+                        });
+                        cell.appendChild(input);
+                    } else if (cellName === 'orderstatus') {
+                        // Maak een dropdown-menu voor orderstatus
+                        const dropdown = document.createElement('select');
+                        dropdown.name = 'orderstatus';
+                        const statusOptions = ['In productie', 'In bestelling', 'In lakkerij','Klaar voor levering/afhaling'];
+                        statusOptions.forEach(status => {
+                            const option = document.createElement('option');
+                            option.value = status;
+                            option.text = status;
+                            dropdown.appendChild(option);
+                        });
+                     
+
+                        dropdown.value = order[cellName];
+
+                        dropdown.addEventListener('change', function () {
+                            // Roep een functie aan om de wijziging naar de server door te geven bij het wijzigen van de dropdown
+                            updateOrderStatus(order.id, dropdown.value);
+                        });
+
+                        cell.appendChild(dropdown);
+                    } else {
+                        // Voeg de normale tekst toe aan de cel
+                        cell.textContent = order[cellName];
+                    }
+                });
+
+                // Voeg een cel toe voor de checkbox
+                const checkboxCell = row.insertCell(cells.length);
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkboxCell.appendChild(checkbox);
+
+                // Voeg een cel toe voor de verwijderknop
+                const deleteCell = row.insertCell(cells.length + 1);
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Verwijderen';
+                deleteButton.style.display = showDeleteButtons ? 'inline-block' :
+                'none'; // Pas de weergave van de knop aan op basis van de huidige status
+                deleteButton.addEventListener('click', function () {
+                    // Roep een functie aan om de rij te verwijderen bij het klikken op de knop
+                    deleteOrder(order.id);
+                });
+                deleteCell.appendChild(deleteButton);
+
+                // Pas de kleur van de rij aan op basis van de orderstatus
+                row.style.backgroundColor = getOrderStatusColor(order.orderstatus);
+            });
+         
+        }
+        document.getElementById('toonVerwijderenKnop').addEventListener('click', function () {
+                // Wissel de weergavestatus van de verwijderknoppen
+                showDeleteButtons = !showDeleteButtons;
+
+                // Haal alle verwijderknoppen op en zet hun display-stijl op basis van de nieuwe weergavestatus
+                const deleteButtons = document.querySelectorAll('#orderTable button');
+                deleteButtons.forEach(button => {
+                    button.style.display = showDeleteButtons ? 'inline-block' : 'none';
+                });
+
+                // Reset de weergavestatus naar onzichtbaar als showDeleteButtons nu false is
+                if (!showDeleteButtons) {
+                    // Verwijder de checkmark bij elke rij
+                    const checkboxes = document.querySelectorAll('#orderTable input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
+            });
+
+
+   /*
+                        
+                    <option value="In productie">In productie</option>
+                    <option value="In bestelling">In bestelling</option>
+                    <option value="In lakkerij">In lakkerij</option>
+                    <option value="Klaar voor levering/afhaling">Klaar voor levering/afhaling</option>
+                        */
+
+        // Functie om de kleur te bepalen op basis van de orderstatus
+        function getOrderStatusColor(status) {
+            switch (status) {
+                case 'Pending':
+                    return 'white'; // of een andere kleur
+                case 'Klaar voor levering/afhaling':
+                    return 'yellow';
+                case 'In lakkerij':
+                    return 'lightblue';
+                default:
+                    return 'white';
+            }
+        }
+
+
+        function updateOrderStatus(orderId, newStatus) {
+            // Stuur een bericht naar de server om de orderstatus bij te werken
+            socket.emit('updateOrderStatus', {
+                orderId,
+                newStatus,
+                newLocation
+            });
+        }
+
+        // Voeg deze JavaScript-functie toe om het veld bij te werken
+        function updateOrderField(orderId, fieldName, newValue) {
+            // Stuur een bericht naar de server om het veld bij te werken
+            socket.emit('updateOrderField', {
+                orderId,
+                fieldName,
+                newValue,
+                newLocation
+            });
+        }
+
+        // Voeg deze JavaScript-functie toe om een rij te verwijderen
+        function deleteOrder(orderId) {
+            // Stuur een bericht naar de server om de rij te verwijderen
+            socket.emit('deleteOrder', orderId, newLocation);
+        }
+
+        // Voeg een event listener toe aan een knop met de id "toonVerwijderenKnop"
+    </script>
+</body>
+
+</html>

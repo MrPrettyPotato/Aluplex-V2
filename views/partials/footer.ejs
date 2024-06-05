@@ -1,0 +1,57 @@
+
+<div height="100px" style="background-color: #ffffff;height: 100px;">
+
+</div>
+<footer  id="footer" class="visible">
+  
+<section class="text-center text-white p-1" style="background-color: #000080">
+<style>
+p{
+  padding-top:0px !important;
+  margin: 0px !important;
+}
+ 
+</style>
+
+  <div class="lead">
+    <div class="row">
+      <div class="col-lg-3 mb-2">
+        <p>Kontichsesteenweg 60 Bus 2</p>
+        <p>2630 Aartselaar</p>
+      </div>
+      <div class="col-lg-6 mb-2">
+        <br>
+        <br>
+        <p>Copyright &copy; ALUPLEX production NV - 2024</p>
+      </div>
+      <div class="col-lg-3 mb-2">
+        <p>info@aluplex.be</p>
+        <p>Tel.: 03/087.49.00</p>
+        <p>BTW : BE 0466.078.070</p>
+      </div>
+    </div>
+  
+  
+  </div>
+</section>
+  <div class="container text-center">
+<a class="text-info" href="#">Verkoopsvoorwaarden</a> - 
+        <a class="text-info" href="#">Sitemap</a> - 
+                <a class="text-info" href="#">Coockiebeleid</a>
+    
+  </div>
+</footer>
+<script>
+  // JavaScript to show footer only when scrolled to the bottom
+  window.addEventListener('scroll', function() {
+      var footer = document.getElementById('footer');
+      var scrollPosition = window.innerHeight + window.pageYOffset;
+      var documentHeight = document.body.offsetHeight;
+      if (scrollPosition >= documentHeight) {
+          footer.classList.add('visible');
+      } else {
+          footer.classList.remove('visible');
+      }
+  });
+</script>
+</html>

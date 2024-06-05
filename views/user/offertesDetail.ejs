@@ -1,0 +1,59 @@
+<%-include('../partials/header')-%>
+<div class="container mt-4" style="width: 80%;">
+  <div class="mb-4">
+    <div class="card">
+
+      <h1 class="display-5">Details van Offerte</h1>
+      <h1 class="display-5">U/Ref.: <%= offertes[0].uref %></h1>
+    </div>
+    <br>
+    <a href="/offertes" class="btn btn-custom">Back</a>
+  </div>
+
+
+
+  <div class="table-responsive" id="offertesTabel" >
+    <!-- row justify-content-center mx-auto-->
+    <table class="table table-hover align-middle ">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Aantal</th>
+          <th scope="col">Naam</th>
+          <th scope="col">Omschrijving</th>
+          <th scope="col">Bruto (€)</th>
+          <th scope="col">Korting (%)</th>
+          <th scope="col">Netto (€)</th>
+          <!-- Voeg andere kolommen toe indien nodig -->
+        </tr>
+      </thead>
+      <tbody>
+        <% offertes.forEach(offerte => { %>
+        <tr>
+          <td><%= offerte.aantal %></td>
+          <td><%= offerte.ref %></td>
+          <td><%= offerte.klant %></td>
+          <td><%= offerte.type %></td>
+          <!-- Voeg andere kolommen toe indien nodig -->
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div id="bestelling">
+    <button id="bestel" class="btn btn-success" onclick="bestel()">Bestel</button>
+  </div>
+  <% if(user.login === 2) {%>
+  <div id="offertepdf">
+    <button id="offertepdf" class="btn btn-success" onclick="offertepdf()">PDf</button>
+  </div>
+  <% } %>
+</div>
+
+<script>
+  const offerte = '<%-JSON.stringify(offertes) %>'
+  const user = '<%=req.session.user.bedrijf%>'
+</script>
+
+<script src="/js/offertesRefDetail.js"></script>
+
+<%-include('../partials/footer')-%>

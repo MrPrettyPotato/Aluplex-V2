@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Hypermodern Webpage</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [darkMode, setDarkMode] = useState(true);
+
+            return (
+                <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-all`}>
+                    <header className="py-5 bg-gray-800 text-center shadow-md">
+                        <h1 className="text-4xl font-bold">Super Hypermodern Webpage</h1>
+                        <button 
+                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition"
+                            onClick={() => setDarkMode(!darkMode)}
+                        >
+                            Toggle Dark Mode
+                        </button>
+                    </header>
+
+                    <main className="p-10">
+                        <section className="my-10">
+                            <h2 className="text-3xl font-semibold mb-4">Section One</h2>
+                            <p className="text-lg">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna. Morbi a bibendum metus. Donec scelerisque sollicitudin enim eu venenatis.
+                            </p>
+                        </section>
+
+                        <section className="my-10">
+                            <h2 className="text-3xl font-semibold mb-4">Section Two</h2>
+                            <p className="text-lg">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna. Morbi a bibendum metus. Donec scelerisque sollicitudin enim eu venenatis.
+                            </p>
+                        </section>
+
+                        <section className="my-10">
+                            <h2 className="text-3xl font-semibold mb-4">Section Three</h2>
+                            <p className="text-lg">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, pulvinar facilisis justo mollis, auctor consequat urna. Morbi a bibendum metus. Donec scelerisque sollicitudin enim eu venenatis.
+                            </p>
+                        </section>
+                    </main>
+
+                    <footer className="py-5 bg-gray-800 text-center shadow-md">
+                        <p>&copy; 2024 Super Hypermodern Webpage. All rights reserved.</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<%-include('partials/header')-%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="container mt-5 calculator" >
+    <h2 class="text-center">Registratie</h2>
+    
+    <form id="registrationForm" action="/register/register" method="post">
+
+        <div class="form-group">
+            <label for="customer_name">Bedrijfsnaam:</label>
+            <input type="text" class="form-control" id="bedrijf" name="bedrijf" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_name">Voornaam:</label>
+            <input type="text" class="form-control" id="voornaam" name="voornaam" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_name">Achternaam:</label>
+            <input type="text" class="form-control" id="achternaam" name="achternaam" required>
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="facemail">E-mail voor facturatie:</label>
+            <input type="email" class="form-control" id="facemail" name="facemail">
+        </div>
+      
+        <div class="form-group">
+            <label for="tel">Telefoonnummer:</label>
+            <input type="tel" class="form-control" id="tel" name="tel">
+        </div>
+        <div class="form-group">
+            <label for="landen">Land:</label>
+        <select id="landen" name="land">
+            <option value="België">België</option>
+            <option value="Nederland">Nederland</option>
+            <option value="Duitsland">Germany</option>
+            <option value="Frankrijk">France</option>
+            <!-- Voeg hier meer landen toe als nodig -->
+        </select>
+        </div>
+        <div class="form-group">
+        <label for="landen">Taal:</label>
+        <select id="talen" name="taal">
+            <option value="NL">Nederlands</option>
+            <option value="EN">English</option>
+            <option value="DE">Deutsch</option>
+            <option value="FR">Français</option>
+            <!-- Voeg hier meer landen toe als nodig -->
+        </select>
+        </div>
+       
+        <div class="form-group">
+            <label for="address">Adres:</label>
+            
+            <label for="address">Huisnummer:</label>
+            <input type="text" class="form-control" id="huisnummer" name="huisnummer" required>
+
+            <label for="address">Straatnaam:</label>
+            <input type="text" class="form-control" id="straatnaam" name="straatnaam" required>
+            
+            <label for="bus">Bus:</label>
+            <input type="text" class="form-control" id="bus" name="bus">
+
+            <label for="address">Postcode:</label>
+            <input type="text" class="form-control" id="postcode" name="postcode" required>
+
+            <label for="address">Stad/Gemeente:</label>
+            <input type="text" class="form-control" id="stad" name="stad" required>
+
+            <div class="form-group">
+                <label for="vat_number">BTW nummer:</label>
+                <input type="text" class="form-control" id="vat_number" name="vat_number">
+            </div>
+           
+            <input type="checkbox" id="factuur_adres_checkbox" name="faccheckbox">
+            <label for="factuur_adres_checkbox">Ander adres voor facturatie</label>
+            
+            <div id="factuuradres" style="display: none;">
+                <label for="factuurs"><h2>Factuuradres:</h2></label>
+                <br>
+                
+                <label for="factuur_address">Straatnaam:</label>
+                <input type="text" class="form-control" id="factuur_Straatnaam" name="factuur_Straatnaam">
+                <label for="factuur_huisnummer">Huisnummer:</label>
+                <input type="text" class="form-control" id="factuur_huisnummer" name="factuur_huisnummer">
+                <label for="factuur_bus">Bus:</label>
+                <input type="text" class="form-control" id="factuur_bus" name="factuur_bus">
+                <label for="factuur_postcode">Postcode:</label>
+                <input type="text" class="form-control" id="factuur_postcode" name="factuur_postcode">
+                <label for="factuur_stad">Stad/Gemeente:</label>
+                <input type="text" class="form-control" id="factuur_stad" name="factuur_stad">
+            </div>
+        </div>
+        
+       
+        <div class="form-group">
+            <label for="password">Wachtwoord:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Verzenden</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var checkbox = document.getElementById('factuur_adres_checkbox');
+        var factuurAdresDiv = document.getElementById('factuuradres');
+
+        // Voeg een event listener toe aan de checkbox
+        checkbox.addEventListener('change', function() {
+            // Als de checkbox is aangevinkt, toon het factuuradresveld, anders verberg het
+            if (checkbox.checked) {
+                factuurAdresDiv.style.display = 'block';
+            } else {
+                factuurAdresDiv.style.display = 'none';
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var togglePassword = document.getElementById('togglePassword');
+        var password = document.getElementById('password');
+
+        // Voeg een event listener toe aan de knop om het wachtwoord te toggle
+        togglePassword.addEventListener('click', function() {
+            var type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Verander het icoon op basis van het wachtwoordtype
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+   const form = document.getElementById('registrationForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Voorkom dat het formulier op de traditionele manier verstuurd wordt
+    
+            const formData = new FormData(form);
+            console.log("formdata",formData);
+            fetch('/register/register', {
+                method: 'POST',
+                headers: {
+        'Content-Type': 'application/json'
+      },
+                body: JSON.stringify({
+        data: Object.fromEntries(formData)
+      })
+            })
+            .then(response => response.json()) // Converteer de response naar JSON
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Toon de alert met de boodschap van de server
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    alert('Er was een probleem met de registratie.');
+                }
+            })
+            .catch(error => {
+                console.error('Fout bij het verwerken van het formulier:', error);
+                alert('Er was een probleem met het versturen van het formulier.');
+            });
+        });
+    });
+    </script>
+
+<%-include('partials/footer')-%>

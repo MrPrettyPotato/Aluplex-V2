@@ -1,0 +1,32 @@
+starten van een git reposetory:
+zet het op ssh
+
+ga naar de map waar je gaat pushen & pullen (terminal) (PC-Aluplex : cd 'D:\Users\PC Gebruiker\Desktop\Aluplex-v2')
+gebruik de volgende command: ssh-keygen
+Zoek de key in de weergegeven map in de terminal
+voeg de code toe in je git project (website)
+	-github -> settings -> SSH and GPG keys -> New SSH key
+
+git init - initializeing a local reposiitory
+
+git add. - Add new files to local repository
+
+git remote set-url origin git@github.com:MrPrettyPotato/AluplexPro.git
+
+git commit -m "text"
+
+git push -u origin main
+
+git pull origin main
+
+
+Een nieuwe branch
+	- git branch branch-name - maak een nieuwe branch
+	- git switch branch-name of git checkout btanch-name - om naar een andere branch te gaan
+	 -git push –u origin branch-name - om naar de branch te pushen
+
+
+code . - Om het project te openen in visual code
+
+nodemon app.js ejs js - om de app te starten (Hou er rekening mee dat je xamp gestart moet hebben voor de database)
+

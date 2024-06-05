@@ -1,0 +1,268 @@
+<!---
+Verkrijg data van de backend, en zet deze in de frontend.
+-->
+<%-include('../partials/header')-%>
+<%-include('../partials/admin/nav')-%>
+<div class="card">
+    <div class="card-header">
+        <h1>Activeer gebruiker</h1>
+    </div>
+    <div class="card-body mx-auto">
+        <!-- Hier word het breedte invoervak toegevoegd-->
+
+
+    <button>
+        <a href="/admin">Terug</a>
+    </button>
+
+    <form id="activateForm"action="/admin/activate" method="post">
+
+
+        <div class="row">
+            <!-- Eerste kolom -->
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Bedrijfs Info
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="bedrijf">Bedrijfsnaam:</label>
+                            <input type="text" class="form-control" id="bedrijf" name="bedrijf"
+                                value="<%= userData.bedrijf %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="voornaam">Voornaam:</label>
+                            <input type="text" class="form-control" id="voornaam" name="voornaam"
+                                value="<%= userData.voornaam %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="achternaam">Achternaam:</label>
+                            <input type="text" class="form-control" id="achternaam" name="achternaam"
+                                value="<%= userData.achternaam %>" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="landen">Land:</label>
+                            <select id="landen" name="land" class="form-control">
+                                <option value="België" <%= userData.land === "België" ? "selected" : "" %>>België
+                                </option>
+                                <option value="Nederland" <%= userData.land === "Nederland" ? "selected" : "" %>>
+                                    Nederland</option>
+                                <option value="Duitsland" <%= userData.land === "Duitsland" ? "selected" : "" %>>
+                                    Duitsland</option>
+                                <option value="Frankrijk" <%= userData.land === "Frankrijk" ? "selected" : "" %>>
+                                    Frankrijk</option>
+                                <!-- Voeg hier meer landen toe als nodig -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="talen">Taal:</label>
+                            <select id="talen" name="taal" class="form-control">
+                                <option value="NL" <%= userData.taal === "NL" ? "selected" : "" %>>Nederlands</option>
+                                <option value="EN" <%= userData.taal === "EN" ? "selected" : "" %>>English</option>
+                                <option value="DE" <%= userData.taal === "DE" ? "selected" : "" %>>Deutsch</option>
+                                <option value="FR" <%= userData.taal === "FR" ? "selected" : "" %>>Français</option>
+                                <!-- Voeg hier meer talen toe als nodig -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="postcode">Adres:</label>
+                            <input type="text" class="form-control" id="postcode" name="postcode"
+                                value="<%= userData.postcode %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stad">Stad/Gemeente:</label>
+                            <input type="text" class="form-control" id="stad" name="stad" value="<%= userData.stad %>"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="straatnaam">Straatnaam:</label>
+                            <input type="text" class="form-control" id="straatnaam" name="straatnaam"
+                                value="<%= userData.straatnaam %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="huisnummer">Huisnummer:</label>
+                            <input type="text" class="form-control" id="huisnummer" name="huisnummer"
+                                value="<%= userData.huisnummer %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bus">Bus:</label>
+                            <input type="text" class="form-control" id="bus" name="bus" value="<%= userData.bus %>">
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tweede kolom -->
+
+            <div class="col-md-6">
+
+                <div class="card">
+                    <div class="card-header">
+                        Factuur gegevens
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <div class="form-group">
+                                <label for="facemail">E-mail:</label>
+                                <input type="email" class="form-control" id="facemail" name="facemail"
+                                    value="<%= userData.facemail %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="facpostcode">Postcode</label>
+                                <input type="text" class="form-control" id="facpostcode" name="facpostcode"
+                                    value="<%= userData.facpostcode %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="facstad">Stad</label>
+                                <input type="text" class="form-control" id="facstad" name="facstad"
+                                    value="<%= userData.facstad %>">
+                            </div>
+                            <div>
+                                <label for="facstraatnaam">Straatnaam</label>
+                                <input type="text" class="form-control" id="facstraatnaam" name="facstraatnaam"
+                                    value="<%= userData.facstraatnaam %>">
+                            </div>
+                            <div>
+                                <label for="fachuisnummer">Huisnummer</label>
+                                <input type="text" class="form-control" id="fachuisnummer" name="fachuisnummer"
+                                    value="<%= userData.fachuisnummer %>">
+                            </div>
+                            <div>
+                                <label for="facbus">Bus</label>
+                                <input type="text" class="form-control" id="facbus" name="facbus"
+                                    value="<%= userData.facbus %>">
+                            </div>
+                            <div>
+                                <label for="btwnummer">BTW Nummer</label>
+                                <input type="text" class="form-control" id="btwnummer" name="btwnummer"
+                                    value="<%= userData.btwnummer %>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tweede kolom -->
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Comunicatie gegevens
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="tel">Telefoon nummer:</label>
+                            <input type="tel" class="form-control" id="tel" name="tel" value="<%= userData.tel %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="<%= userData.email %>" required>
+                        </div>
+
+                  
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 ">
+                <div class="card">
+                    <div class="card-header">
+                        Kortingen
+                    </div>
+                    <div class="card-body">
+
+                        <label for="huisnummer">
+                            <h1>Kortingen</h1>
+                        </label>
+
+                        <div class="form-group">
+                            <label for="screenkorting">Korting Screens:</label>
+                            <input type="text" class="form-control" id="screenkorting" name="screenkorting"
+                                value="<%= userData.screenkorting %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rolluikbladkorting">Korting Rolluikblad:</label>
+                            <input type="text" class="form-control" id="rolluikbladkorting" name="rolluikbladkorting"
+                                value="<%= userData.rolluikbladkorting %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tradirolluikkorting">Korting Tradirolluik:</label>
+                            <input type="text" class="form-control" id="tradirolluikkorting" name="tradirolluikkorting"
+                                value="<%= userData.tradirolluikkorting %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="voorzetrolluikkorting">Korting Voorzetrolluik:</label>
+                            <input type="text" class="form-control" id="voorzetrolluikkorting"
+                                name="voorzetrolluikkorting" value="<%= userData.voorzetrolluikkorting %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lakkerijkorting">Korting lakkerij:</label>
+                            <input type="text" class="form-control" id="lakkerijkorting"
+                                name="lakkerijkorting" value="<%= userData.lakkerijkorting %>" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <!-- Verzenden knop -->
+        <button type="submit" class="btn btn-primary">Toevoegen</button>
+    </form>
+</div>
+
+</div>
+<script>
+      document.addEventListener('DOMContentLoaded', function() {
+   const form = document.getElementById('activateForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Voorkom dat het formulier op de traditionele manier verstuurd wordt
+    
+            const formData = new FormData(form);
+            console.log("formdata",formData);
+            fetch('/admin/activate', {
+                method: 'POST',
+                headers: {
+        'Content-Type': 'application/json'
+      },
+                body: JSON.stringify({
+        data: Object.fromEntries(formData)
+      })
+            })
+            .then(response => response.json()) // Converteer de response naar JSON
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Toon de alert met de boodschap van de server
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    alert('Er was een probleem met de registratie.');
+                }
+            })
+            .catch(error => {
+                console.error('Fout bij het verwerken van het formulier:', error);
+                alert('Er was een probleem met het versturen van het formulier.');
+            });
+        });
+    });
+</script>
+<%-include('../partials/admin/navend')-%>
+
+<%-include('../partials/footer')-%>

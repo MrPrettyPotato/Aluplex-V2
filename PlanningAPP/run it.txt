@@ -1,0 +1,4 @@
+Ga naar de juiste route: cd 'D:\Users\PC Gebruiker\Desktop\Nieuwe map\Aluplex-v2\planningapp'
+Start de server: node app.js
+
+lokaal: 192.168.1.46:3000
